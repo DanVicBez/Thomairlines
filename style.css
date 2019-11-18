@@ -1,0 +1,41 @@
+* {
+	font-family: sans-serif;
+}
+
+body {
+	margin: 0;
+}
+
+#banner {
+	background: blue;
+	margin-bottom: 50px;
+}
+
+h1 {
+	text-align: center;
+	font-size: 48px;
+	color: white;
+	margin: 0;
+}
+
+div, form {
+	text-align: center;
+}
+
+#error {
+	color: red;
+	margin-bottom: 20px;
+}
+
+input {
+	margin-bottom: 20px;
+	text-align: center;
+	width: 240px;
+	height: 30px;
+	font-size: 22px;
+}
+
+input[type='submit'] {
+	width: 200px;
+	height: 40px;
+}
