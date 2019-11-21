@@ -20,5 +20,7 @@
 		<%
 		    }
 		%>
+		
+		<img src = "https://i.imgur.com/UbjLxeh.jpg" width = 200px>
 	</body>
 </html>

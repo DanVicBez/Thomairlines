@@ -39,3 +39,9 @@ input[type='submit'] {
 	width: 200px;
 	height: 40px;
 }
+
+img{
+	margin-right: 5%;
+	float: right;
+	
+}
