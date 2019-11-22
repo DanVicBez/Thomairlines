@@ -5,6 +5,14 @@
 		<title>Login Form</title>
 		<link rel="stylesheet" href="style.css"/>
 	</head>
+	<style>
+		body {
+ 			background-image: url("https://i.imgur.com/A3Hbch8.jpg");
+ 			background-repeat: no-repeat;
+ 			background-attachment: fixed;
+  			background-size: 100%;
+		}
+	</style>
 	<body>
 		<div id="banner">
 			<h1>Thomairlines</h1>
@@ -14,8 +22,14 @@
 		%>
 				<div id="error">ERROR: Invalid username or password. Please try again</div>
 		<%
+			} else {
+		%>
+				<div id="space"></div>
+		<%
 			}
 		%>
+		<img alt = "Thomairlines" src = "https://i.imgur.com/HJnuMXp.png" width = 30% style="float:left; margin-left: 6%"/>
+		<img alt = "Thomairlines" src = "https://i.imgur.com/35XJ6lz.jpg" width = 30% style="float:right; margin-right: 6%"/>
 		<div id="form">
 			<form action="checkLoginDetails.jsp" method="POST">
 				<input type="text" name="username" placeholder="username"/>

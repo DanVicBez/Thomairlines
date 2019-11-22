@@ -5,6 +5,14 @@
 		<title>Signup Form</title>
 		<link rel="stylesheet" href="style.css"/>
 	</head>
+	<style>
+		body {
+ 			background-image: url("https://i.imgur.com/A3Hbch8.jpg");
+ 			background-repeat: no-repeat;
+ 			background-attachment: fixed;
+  			background-size: 100%;
+		}
+	</style>
 	<body>
 		<div id="banner">
 			<h1>Thomairlines</h1>
@@ -44,6 +52,9 @@
 			<input type="password" name="confirmpassword" placeholder="confirm password"/>
 			<br/>
 			<input type="submit" value="Sign up"/>
+		</form>
+		<form action="logout.jsp" method="POST">
+			<input type="submit" value="Go Back"/>
 		</form>
 	</body>
 </html>
