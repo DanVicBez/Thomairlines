@@ -28,8 +28,8 @@
 		<%
 			}
 		%>
-		<img alt = "Thomairlines" src = "https://i.imgur.com/HJnuMXp.png" width = 30% style="float:left; margin-left: 6%"/>
-		<img alt = "Thomairlines" src = "https://i.imgur.com/35XJ6lz.jpg" width = 30% style="float:right; margin-right: 6%"/>
+		<img alt = "Thomairlines" src = "https://i.imgur.com/HJnuMXp.png" width = 30% style="float:left; margin-left: 6%; border: 5px solid black"/>
+		<img alt = "Thomairlines" src = "https://i.imgur.com/35XJ6lz.jpg" width = 30% style="float:right; margin-right: 6%; border: 5px solid black"/>
 		<div id="form">
 			<form action="checkLoginDetails.jsp" method="POST">
 				<input type="text" name="username" placeholder="username"/>
