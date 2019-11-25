@@ -7,14 +7,15 @@
 	</head>
 	<style>
 		body {
- 			background-image: url("https://i.imgur.com/A3Hbch8.jpg");
+ 			background-image: url("https://images.pexels.com/photos/314726/pexels-photo-314726.jpeg");
  			background-repeat: no-repeat;
  			background-attachment: fixed;
-  			background-size: 100%;
-		}
+  			background-size: cover;
+  			}
 	</style>
 	<body>
 		<div id="banner">
+			<img alt = "Thomairlines" src = "https://i.imgur.com/NfZWVqI.jpg" width = 55px style = "display: inline"/>
 			<h1>Thomairlines</h1>
 		</div>
 		<%
@@ -40,5 +41,7 @@
 			</form>
 			<input onclick="window.location.href='signup.jsp'" type="submit" value="Sign up"/>
 		</div>
+	
+	<!--<img alt = "Thomairlines" src = "https://media.giphy.com/media/3NhLokVyVOv0C1WVaT/giphy.gif" width = 15% style = "display: block; margin-left: auto; margin-right: auto"/>-->
 	</body>
 </html>

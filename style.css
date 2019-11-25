@@ -7,14 +7,15 @@ body {
 }
 
 #banner {
-	background: #543ecf;
+	background: #0b20d9;
 	margin-bottom: 50px;
 }
 
 h1 {
 	text-align: center;
 	font-size: 60px;
-	color: #ff9214;;
+	color: #99c6cf;
+	display: inline;
 	margin: 0;
 }
 
@@ -47,10 +48,4 @@ input {
 input[type='submit'] {
 	width: 200px;
 	height: 40px;
-}
-
-img{
-	margin-right: 5%;
-	float: right;
-	
 }

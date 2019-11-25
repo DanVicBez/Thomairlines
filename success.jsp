@@ -5,7 +5,7 @@
 	</head>
 	<style>
 		body {
- 			background-image: url("https://i.imgur.com/A3Hbch8.jpg");
+ 			background-image: url("https://images.pexels.com/photos/440731/pexels-photo-440731.jpeg");
  			background-repeat: no-repeat;
  			background-attachment: fixed;
   			background-size: 100%;
@@ -28,7 +28,8 @@
 		<%
 		    }
 		%>
-		
-		<img alt = "Balouek's Eyewear" src = "https://i.imgur.com/UbjLxeh.jpg" width = 200px style="float:right; margin-right: 5%"/>
+		<img alt = "Thomairlines" src = "https://i.imgur.com/NfZWVqI.jpg" width = 200px style="float:right; margin-right: 5%"/>
+		<!--  <img alt = "Balouek's Eyewear" src = "https://i.imgur.com/UbjLxeh.jpg" width = 200px style="float:right; margin-right: 5%"/>
+		-->
 	</body>
 </html>
