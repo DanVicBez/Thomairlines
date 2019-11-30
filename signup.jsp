@@ -15,6 +15,7 @@
 	</style>
 	<body>
 		<div id="banner">
+			<img alt = "Thomairlines" src = "https://i.imgur.com/NfZWVqI.jpg" width = 55px style = "display: inline"/>
 			<h1>Thomairlines</h1>
 		</div>
 		<%

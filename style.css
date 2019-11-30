@@ -49,3 +49,16 @@ input[type='submit'] {
 	width: 200px;
 	height: 40px;
 }
+
+#airportSelect {
+	text-align: center;
+	width: 180px;
+	height: 30px;
+	font-size: 20px;
+}
+
+#pageText {
+	color: white;
+	font-size: 20px;
+	float:left;
+}
