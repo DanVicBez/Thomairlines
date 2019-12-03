@@ -5,15 +5,16 @@
 	<head>
 		<title>Login Form</title>
 		<link rel="stylesheet" href="style.css"/>
+		<meta charset="utf-8"/>
+		<style>
+			body {
+	 			background-image: url("https://images.pexels.com/photos/440731/pexels-photo-440731.jpeg");
+	 			background-repeat: no-repeat;
+	 			background-attachment: fixed;
+	  			background-size: 100%;
+			}
+		</style>
 	</head>
-	<style>
-		body {
- 			background-image: url("https://images.pexels.com/photos/440731/pexels-photo-440731.jpeg");
- 			background-repeat: no-repeat;
- 			background-attachment: fixed;
-  			background-size: 100%;
-		}
-	</style>
 	<body>
 		<div id="banner">
 			<img alt = "Thomairlines" src = "https://i.imgur.com/NfZWVqI.jpg" width = 55px style = "display: inline"/>
@@ -27,12 +28,14 @@
 		<%
 			} else {
 		%>
-				<div id = 'pageText'> Welcome <%=session.getAttribute("user")%>
+				<div id = 'pageText'>
+					Welcome, <%=session.getAttribute("user")%>!
+					<br>
 					<a href='logout.jsp'>Log out</a>
 				</div>
 				<select id = 'airportSelect' required style = "margin-left: 10%">
 					<%
-					String url = "jdbc:mysql://trs2019.cusoi1lz87e1.us-east-2.rds.amazonaws.com/TravelReservationSystem";
+					String url = "jdbc:mysql://trs2019.cusoi1lz87e1.us-east-2.rds.amazonaws.com/TravelReservationSystem?useUnicode=yes&characterEncoding=UTF-8";
 					Class.forName("com.mysql.jdbc.Driver");
 					Connection con = DriverManager.getConnection(url, "admin", "prinfo$9.99");
 					ResultSet rs = con.prepareStatement("SELECT * FROM Airport").executeQuery();
@@ -41,7 +44,7 @@
 					<%
 					while(rs.next()) {
 						%>
-						<option><%=rs.getString(1)%></option>
+						<option><%=rs.getString(2)%> (<%=rs.getString(1)%>)</option>
 						<%
 					}
 					%>
@@ -55,7 +58,7 @@
 					<%
 					while(rs.next()) {
 						%>
-						<option><%=rs.getString(1)%></option>
+						<option><%=rs.getString(2)%> (<%=rs.getString(1)%>)</option>
 						<%
 					}
 					%>
