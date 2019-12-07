@@ -31,7 +31,12 @@
 				<div id = 'pageText'>
 					Welcome, <%=session.getAttribute("user")%>!
 					<br>
+					<a href = 'reservations.jsp'>My Reservations</a>
+					<br>
 					<a href='logout.jsp'>Log out</a>
+				</div>
+				<div id = 'flightSearch'>
+					<font color = "white">Flight Search</font>
 				</div>
 				<select id = 'airportSelect' required style = "margin-left: 10%">
 					<%
@@ -70,7 +75,9 @@
 				%>
 				<input type="date" name="departureDate" id="ddateinput" value = <%=dtf.format(now)%> min = <%=dtf.format(now)%>/>
 				<input type="date" name="arrivalDate" id="adateinput" value = <%=dtf.format(now)%> min = <%=dtf.format(now)%>/>
-				
+				<button>
+					Search
+				</button>
 				<!--<img alt = "Thomairlines" src = "https://i.imgur.com/NfZWVqI.jpg" width = 200px style="float:right; margin-right: 5%"/>-->
 				<img alt = "Balouek's Eyewear" src = "https://i.imgur.com/UbjLxeh.jpg" width = 200px style="float:right; margin-right: 5%"/>
 		<%
