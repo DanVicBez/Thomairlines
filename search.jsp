@@ -8,12 +8,8 @@
 	
 	ResultSet rs = (ResultSet) session.getAttribute("results");
 	
-	boolean flex = false;
-	if ("on".equals(request.getParameter("flexibility"))) {
-		flex = true;
-	} else {
-		flex = false;
-	}
+	boolean flex = ("on".equals(request.getParameter("flexibility")));
+	
 	if (flex) {
 		PreparedStatement st = con.prepareStatement("SELECT * " +
 													"FROM Flight " +
@@ -29,13 +25,8 @@
 		st.setString(2, request.getParameter("toAirport").substring(0, 4));
 		st.setString(3, "%" + new SimpleDateFormat("EE").format(new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("fromDate"))) + "%");
 		rs = st.executeQuery();
-		if (rs.getFetchSize() == 0){
-			%>
-			No results could be found
-			<%
-		};
 	}
-
+	
 	
 	session.setAttribute("results", rs);
 	response.sendRedirect("success.jsp");
