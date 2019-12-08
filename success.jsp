@@ -101,6 +101,18 @@
 						<option>Round-Trip</option>
 						<option>One-Way</option>
 					</select>
+					<select id = 'sortBy' required name = "sortBy">
+						<option selected>Not Sorted</option>
+						<option>Sort By Price</option>
+						<option>Sort By Take-Off Time</option>
+						<option>Sort By Landing Time</option>
+					</select>
+					<select id = 'filterBy' required name = "filterBy">
+						<option selected>Not Filtered</option>
+						<option>Filter By Price</option>
+						<option>Filter By Number of Stops</option>
+						<option>Filter By Airline</option>
+					</select>
 					<input type="checkbox" name = "flexibility"/>Flexible Dates
 					<button>Search</button>
 				</form>
@@ -122,17 +134,18 @@
 								<div class="result">
 									<table>
 										<tr>
-											<td style="width: 50%"><%=rs.getString("airline_name")%> Flight <%=rs.getString("airline_id")%><%=rs.getInt("flight_num")%></td>
-											<td style="width: 15%; text-align: right;"><%=rs.getString("d_airport_id")%></td>
+											<td style="width: 40%"><%=rs.getString("airline_name")%> Flight <%=rs.getString("airline_id")%><%=rs.getInt("flight_num")%></td>
+											<td style="width: 13%; text-align: right;"><%=rs.getString("d_airport_id")%></td>
 											<td style="width: 5%">&rarr;</td>
-											<td style="width: 15%"><%=rs.getString("a_airport_id")%></td>
-											<td style="width: 15%">$<%=rs.getInt("price")%></td>
+											<td style="width: 13%"><%=rs.getString("a_airport_id")%></td>
+											<td style="width: 10%">$<%=rs.getInt("price")%></td>
+											<td style="width: 19%">Reserve Flight</td>
 										</tr>
 										<tr>
 											<td></td>
-											<td style="text-align: right"><%=rs.getDate("departure_time")%></td>
+											<td style="text-align: right"><%=rs.getString("departure_time").substring(0,5)%></td>
 											<td></td>
-											<td><%=rs.getString("arrival_time")%></td>
+											<td><%=rs.getString("arrival_time").substring(0,5)%></td>
 										</tr>
 									</table>
 								</div>
@@ -157,17 +170,18 @@
 									<div class="result">
 										<table>
 											<tr>
-												<td style="width: 50%"><%=rs2.getString("airline_name")%> Flight <%=rs2.getString("airline_id")%><%=rs2.getInt("flight_num")%></td>
-												<td style="width: 15%; text-align: right;"><%=rs2.getString("d_airport_id")%></td>
+												<td style="width: 40%"><%=rs2.getString("airline_name")%> Flight <%=rs2.getString("airline_id")%><%=rs2.getInt("flight_num")%></td>
+												<td style="width: 13%; text-align: right;"><%=rs2.getString("d_airport_id")%></td>
 												<td style="width: 5%">&rarr;</td>
-												<td style="width: 15%"><%=rs2.getString("a_airport_id")%></td>
-												<td style="width: 15%">$<%=rs2.getInt("price")%></td>
+												<td style="width: 13%"><%=rs2.getString("a_airport_id")%></td>
+												<td style="width: 10%">$<%=rs2.getInt("price")%></td>
+												<td style="width: 19%">Reserve Flight</td>
 											</tr>
 											<tr>
 												<td></td>
-												<td style="text-align: right"><%=rs2.getString("departure_time")%></td>
+												<td style="text-align: right"><%=rs2.getString("departure_time").substring(0,5)%></td>
 												<td></td>
-												<td><%=rs2.getString("arrival_time")%></td>
+												<td><%=rs2.getString("arrival_time").substring(0,5)%></td>
 											</tr>
 										</table>
 									</div>
