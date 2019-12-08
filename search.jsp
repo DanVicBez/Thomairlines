@@ -10,23 +10,21 @@
 	
 	boolean flex = ("on".equals(request.getParameter("flexibility")));
 	
+	PreparedStatement st;
 	if (flex) {
-		PreparedStatement st = con.prepareStatement("SELECT * " +
-													"FROM Flight " +
-													"WHERE d_airport_id = ? AND a_airport_id = ?");
-		st.setString(1, request.getParameter("fromAirport").substring(0, 4));
-		st.setString(2, request.getParameter("toAirport").substring(0, 4));
-		rs = st.executeQuery();
+		st = con.prepareStatement("SELECT * " +
+								  "FROM Flight " +
+								  "WHERE d_airport_id = ? AND a_airport_id = ?");
 	} else {
-		PreparedStatement st = con.prepareStatement("SELECT * " +
-													"FROM Flight " +
-													"WHERE d_airport_id = ? AND a_airport_id = ? AND days LIKE ?");
-		st.setString(1, request.getParameter("fromAirport").substring(0, 4));
-		st.setString(2, request.getParameter("toAirport").substring(0, 4));
+		st = con.prepareStatement("SELECT * " +
+								  "FROM Flight " +
+								  "WHERE d_airport_id = ? AND a_airport_id = ? AND days LIKE ?");
 		st.setString(3, "%" + new SimpleDateFormat("EE").format(new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("fromDate"))) + "%");
-		rs = st.executeQuery();
 	}
 	
+	st.setString(1, request.getParameter("fromAirport").substring(0, 4));
+	st.setString(2, request.getParameter("toAirport").substring(0, 4));
+	rs = st.executeQuery();
 	
 	session.setAttribute("results", rs);
 	response.sendRedirect("success.jsp");
