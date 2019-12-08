@@ -21,6 +21,7 @@
 	String query = "SELECT * " +
 				   "FROM Flight NATURAL JOIN Airline " +
 				   "WHERE d_airport_id = ? AND a_airport_id = ?" + (flex ? "" : " AND days LIKE ?");
+
 	if("Sort by price".equals(sortBy)) {
 		query += " ORDER BY price";
 	} else if("Sort by take-off time".equals(sortBy)) {
