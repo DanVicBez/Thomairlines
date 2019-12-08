@@ -10,7 +10,7 @@
 	ResultSet rs2 = (ResultSet) session.getAttribute("results2");
 	
 	boolean flex = ("on".equals(request.getParameter("flexibility")));
-	
+
 	String flightType = request.getParameter("flightType");
 	PreparedStatement st;
 	PreparedStatement st2;
@@ -44,6 +44,23 @@
 	st.setString(1, request.getParameter("fromAirport").substring(0, 4));
 	st.setString(2, request.getParameter("toAirport").substring(0, 4));
 	rs = st.executeQuery();
+
+	PreparedStatement st;
+	if (flex) {
+		st = con.prepareStatement("SELECT * " +
+								  "FROM Flight " +
+								  "WHERE d_airport_id = ? AND a_airport_id = ?");
+	} else {
+		st = con.prepareStatement("SELECT * " +
+								  "FROM Flight " +
+								  "WHERE d_airport_id = ? AND a_airport_id = ? AND days LIKE ?");
+		st.setString(3, "%" + new SimpleDateFormat("EE").format(new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("fromDate"))) + "%");
+	}
+	
+	st.setString(1, request.getParameter("fromAirport").substring(0, 4));
+	st.setString(2, request.getParameter("toAirport").substring(0, 4));
+	rs = st.executeQuery();
+	
 	session.setAttribute("results", rs);
 	session.setAttribute("results2", rs2);
 	response.sendRedirect("success.jsp");
