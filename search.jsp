@@ -37,29 +37,19 @@
 					"WHERE a_airport_id = ? AND d_airport_id = ? AND days LIKE ?");
 			st2.setString(1, request.getParameter("fromAirport").substring(0, 4));
 			st2.setString(2, request.getParameter("toAirport").substring(0, 4));
-			st2.setString(3, "%" + new SimpleDateFormat("EE").format(new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("fromDate"))) + "%");
+			st2.setString(3, "%" + new SimpleDateFormat("EE").format(new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("toDate"))) + "%");
 			rs2 = st2.executeQuery();
 		}
-	}
-	st.setString(1, request.getParameter("fromAirport").substring(0, 4));
-	st.setString(2, request.getParameter("toAirport").substring(0, 4));
-	rs = st.executeQuery();
-
-	PreparedStatement st;
-	if (flex) {
-		st = con.prepareStatement("SELECT * " +
-								  "FROM Flight " +
-								  "WHERE d_airport_id = ? AND a_airport_id = ?");
-	} else {
-		st = con.prepareStatement("SELECT * " +
-								  "FROM Flight " +
-								  "WHERE d_airport_id = ? AND a_airport_id = ? AND days LIKE ?");
-		st.setString(3, "%" + new SimpleDateFormat("EE").format(new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("fromDate"))) + "%");
 	}
 	
 	st.setString(1, request.getParameter("fromAirport").substring(0, 4));
 	st.setString(2, request.getParameter("toAirport").substring(0, 4));
 	rs = st.executeQuery();
+
+// 	session.setAttribute("results", rs);
+// 	session.setAttribute("results2", rs2);
+// 	session.setAttribute("results", rs);
+// 	session.setAttribute("results2", rs2);
 	
 	session.setAttribute("results", rs);
 	session.setAttribute("results2", rs2);
