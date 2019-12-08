@@ -44,7 +44,7 @@
 						<th>Return Date</th>
 					</tr>
 					<tr>
-						<td>
+						<td id = "searchtd">
 							<select id = 'airportSelect' required>
 								<%
 								String url = "jdbc:mysql://trs2019.cusoi1lz87e1.us-east-2.rds.amazonaws.com/TravelReservationSystem?useUnicode=yes&characterEncoding=UTF-8";
@@ -62,7 +62,7 @@
 								%>
 							</select>
 						</td>
-						<td>
+						<td id = "searchtd">
 							<select id = 'airportSelect' required>
 								<%
 								// TODO: prevent people from selecting same airport as departure
@@ -83,10 +83,10 @@
 						DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 						// TODO: ban people from selecting later departure than arrival dates
 						%>
-						<td>
+						<td id = "searchtd">
 							<input type="date" name="departureDate" id="ddateinput" value = <%=dtf.format(now)%> min = <%=dtf.format(now)%>></input>
 						</td>
-						<td>
+						<td id = "searchtd">
 							<input type="date" name="arrivalDate" id="adateinput" value = <%=dtf.format(now)%> min = <%=dtf.format(now)%>></input>
 						</td>
 						<button>
