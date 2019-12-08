@@ -33,7 +33,7 @@
 					Past Reservations
 				</font>
 			</p>
-			<table>
+			<table style="background-color:skyblue">
 				<tr>
 					<th>Flight Number</th>
 					<th>Ticket Number</th>
@@ -42,7 +42,7 @@
 					<th>Arriving Airport</th>
 					<th>Departure Date</th>
 					<th>Departure Time</th>
-					<th>Arrival time</th>
+					<th>Arrival Time</th>
 					<th>Seat Number</th>
 					<th>Class</th>
 					<th>Purchase Time</th>
@@ -56,7 +56,7 @@
 					Upcoming Reservations
 				</font>
 			</p>
-			<table border = 1>
+			<table style="background-color:skyblue">
 				<tr>
 					<th>Flight Number</th>
 					<th>Ticket Number</th>
@@ -65,20 +65,14 @@
 					<th>Arriving Airport</th>
 					<th>Departure Date</th>
 					<th>Departure Time</th>
-					<th>Arrival time</th>
+					<th>Arrival Time</th>
 					<th>Seat Number</th>
 					<th>Class</th>
 					<th>Purchase Time</th>
 					<th>Price</th>
+					<th>Cancel?</th>
 				</tr>
 			</table>
 		</div>
 	</body>
-<head>
-<meta charset="ISO-8859-1">
-<title>My Reservations</title>
-</head>
-<body>
-
-</body>
 </html>
