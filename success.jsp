@@ -31,11 +31,13 @@
 				<div id="pageText">
 					Welcome, <%=session.getAttribute("user")%>!
 					<br>
+					<br>
 					<a href="reservations.jsp">My Reservations</a>
+					<br>
 					<br>
 					<a href="logout.jsp">Log out</a>
 				</div>
-				<form method="post" action="search.jsp">
+				<form method="post" action="search.jsp" align="center" >
 					<table align="center" bgcolor="#82d2f5">
 						<tr>
 							<th>From?</th>
@@ -89,11 +91,17 @@
 							<td id="searchtd">
 								<input type="date" name="toDate" id="adateinput" value=<%=dtf.format(now)%> min=<%=dtf.format(now)%>></input>
 							</td>
-							<input type="submit" />
+							
 							<!--<img alt="Thomairlines" src="https://i.imgur.com/NfZWVqI.jpg" width=200px style="float:right; margin-right: 5%"/>-->
 							<img alt="Balouek"s Eyewear" src="https://i.imgur.com/UbjLxeh.jpg" width=200px style="float:right; margin-right: 5%"/>
 						</tr>
 					</table>
+					<select id = 'flightType' onchange = "oneway()" required name = "flightType">
+						<option>Round-Trip</option>
+						<option>One-Way</option>
+					</select>
+					<input type="checkbox" name = "flexibility"/>Flexible Dates
+					<input type="submit" />
 				</form>
 				<%
 					rs = (ResultSet) session.getAttribute("results");
@@ -109,5 +117,14 @@
 		<%
 			}
 		%>
+		<script>
+		function oneway() {
+			if (document.getElementById('flightType').value === 'One-Way') {
+				document.getElementById('adateinput').setAttribute('disabled','disabled');
+			} else {
+				document.getElementById('adateinput').removeAttribute('disabled');
+			}
+		}
+		</script>
 	</body>
 </html>

@@ -6,14 +6,36 @@
 	Class.forName("com.mysql.jdbc.Driver");
 	Connection con = DriverManager.getConnection(url, "admin", "prinfo$9.99");
 	
-	PreparedStatement st = con.prepareStatement("SELECT * " +
-												"FROM Flight " +
-												"WHERE d_airport_id = ? AND a_airport_id = ? AND days LIKE ?");
-	st.setString(1, request.getParameter("fromAirport").substring(0, 4));
-	st.setString(2, request.getParameter("toAirport").substring(0, 4));
-	st.setString(3, "%" + new SimpleDateFormat("EE").format(new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("fromDate"))) + "%");
+	ResultSet rs = (ResultSet) session.getAttribute("results");
 	
-	ResultSet rs = st.executeQuery();
+	boolean flex = false;
+	if ("on".equals(request.getParameter("flexibility"))) {
+		flex = true;
+	} else {
+		flex = false;
+	}
+	if (flex) {
+		PreparedStatement st = con.prepareStatement("SELECT * " +
+													"FROM Flight " +
+													"WHERE d_airport_id = ? AND a_airport_id = ?");
+		st.setString(1, request.getParameter("fromAirport").substring(0, 4));
+		st.setString(2, request.getParameter("toAirport").substring(0, 4));
+		rs = st.executeQuery();
+	} else {
+		PreparedStatement st = con.prepareStatement("SELECT * " +
+													"FROM Flight " +
+													"WHERE d_airport_id = ? AND a_airport_id = ? AND days LIKE ?");
+		st.setString(1, request.getParameter("fromAirport").substring(0, 4));
+		st.setString(2, request.getParameter("toAirport").substring(0, 4));
+		st.setString(3, "%" + new SimpleDateFormat("EE").format(new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("fromDate"))) + "%");
+		rs = st.executeQuery();
+		if (rs.getFetchSize() == 0){
+			%>
+			No results could be found
+			<%
+		};
+	}
+
 	
 	session.setAttribute("results", rs);
 	response.sendRedirect("success.jsp");

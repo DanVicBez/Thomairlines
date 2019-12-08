@@ -45,7 +45,7 @@ a:hover {
 	height: 38px;
 }
 
-input {
+input:not([type='checkbox']) {
 	text-align: center;
 	width: 240px;
 	height: 30px;
