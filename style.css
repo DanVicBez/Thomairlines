@@ -77,7 +77,8 @@ form > input {
 	padding-left: 20px;
 }
 
-table, th, td{
+table, th, td {
+	background: #82d2f5;
 	border: 2px solid black;
 	border-collapse: collapse;
 	padding: 10px;
@@ -88,5 +89,25 @@ table, th, td{
 }
 
 .result {
-	background: white;
+	background: #82d2f5;
+	width: 50%;
+	height: 100px;
+	margin: 10px auto;
+	border: 2px solid black;
+	border-radius: 10px;
+	font-size: 20px;
+}
+
+.result table {
+	width: 100%;
+}
+
+.result table, .result td {
+	border: none;
+	background: none;
+}
+
+.section {
+	display: block;
+	color: white;
 }
