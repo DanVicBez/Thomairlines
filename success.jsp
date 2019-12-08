@@ -50,10 +50,10 @@
 							<td id="searchtd">
 								<select name="fromAirport" id="airportSelect" required>
 									<%
-										String url="jdbc:mysql://trs2019.cusoi1lz87e1.us-east-2.rds.amazonaws.com/TravelReservationSystem?useUnicode=yes&characterEncoding=UTF-8";
+										String url = "jdbc:mysql://trs2019.cusoi1lz87e1.us-east-2.rds.amazonaws.com/TravelReservationSystem?useUnicode=yes&characterEncoding=UTF-8";
 										Class.forName("com.mysql.jdbc.Driver");
-										Connection con=DriverManager.getConnection(url, "admin", "prinfo$9.99");
-										ResultSet rs=con.prepareStatement("SELECT * FROM Airport").executeQuery();
+										Connection con = DriverManager.getConnection(url, "admin", "prinfo$9.99");
+										ResultSet rs = con.prepareStatement("SELECT * FROM Airport").executeQuery();
 									%>
 									<option value="" selected disabled>Departure Airport</option>
 									<%

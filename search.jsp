@@ -16,18 +16,25 @@
 	String flightType = request.getParameter("flightType");
 	String sortBy = request.getParameter("sortBy");
 	String filterBy = request.getParameter("filterBy");
+	boolean reverse = "on".equals(request.getParameter("reverse"));
 	boolean flex = "on".equals(request.getParameter("flexibility"));
 	
 	String query = "SELECT * " +
 				   "FROM Flight NATURAL JOIN Airline " +
 				   "WHERE d_airport_id = ? AND a_airport_id = ?" + (flex ? "" : " AND days LIKE ?");
 
-	if("Sort by price".equals(sortBy)) {
-		query += " ORDER BY price";
-	} else if("Sort by take-off time".equals(sortBy)) {
-		query += " ORDER BY departure_time";
-	} else if("Sort by landing time".equals(sortBy)) {
-		query += " ORDER BY arrival_time";
+	if(!"Not Sorted".equals(sortBy)) {
+		if("Sort By Price".equals(sortBy)) {
+			query += " ORDER BY price";
+		} else if("Sort By Take-Off Time".equals(sortBy)) {
+			query += " ORDER BY departure_time";
+		} else if("Sort By Landing Time".equals(sortBy)) {
+			query += " ORDER BY arrival_time";
+		}
+
+		if(reverse) {
+			query += " DESC";
+		}
 	}
 	
 	PreparedStatement st = con.prepareStatement(query);
@@ -52,6 +59,7 @@
 	st.setString(1, fromAirport.substring(0, 4));
 	st.setString(2, toAirport.substring(0, 4));
 	rs = st.executeQuery();
+
 	session.setAttribute("results", rs);
 	session.setAttribute("results2", rs2);
 	response.sendRedirect("success.jsp");
