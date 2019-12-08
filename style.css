@@ -52,7 +52,7 @@ input {
 	font-size: 22px;
 }
 
-form input {
+form > input {
 	margin-bottom: 20px;
 }
 
