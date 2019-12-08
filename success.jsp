@@ -1,6 +1,7 @@
 <%@ page import ="java.sql.*"%>
 <%@ page import ="java.time.LocalDateTime"%>
 <%@ page import ="java.time.format.DateTimeFormatter"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <html>
 	<head>
 		<title>Login Form</title>
@@ -129,7 +130,7 @@
 										</tr>
 										<tr>
 											<td></td>
-											<td style="text-align: right"><%=rs.getString("departure_time")%></td>
+											<td style="text-align: right"><%=rs.getDate("departure_time")%></td>
 											<td></td>
 											<td><%=rs.getString("arrival_time")%></td>
 										</tr>
