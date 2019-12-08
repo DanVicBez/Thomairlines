@@ -46,11 +46,14 @@ a:hover {
 }
 
 input {
-	margin-bottom: 20px;
 	text-align: center;
 	width: 240px;
 	height: 30px;
 	font-size: 22px;
+}
+
+form input {
+	margin-bottom: 20px;
 }
 
 input[type='submit'] {
@@ -71,4 +74,14 @@ input[type='submit'] {
 	float:left;
 	text-align: left;
 	padding-left: 20px;
+}
+
+table, th, td{
+	border: 2px solid black;
+	border-collapse: collapse;
+	padding: 10px;
+}
+
+#searchtd {
+	padding: 10px;
 }
