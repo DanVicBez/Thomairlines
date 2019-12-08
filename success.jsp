@@ -119,6 +119,18 @@
 							} while(rs.next());
 						}
 					}
+					ResultSet rs2 = (ResultSet) session.getAttribute("results2");
+					if(rs2 != null) {
+						if (!rs2.next()) {
+						} else {
+							do {
+								%>
+								<%=rs2.getString(1)%> <%=rs2.getString(2)%> <%=rs2.getString(3)%> <%=rs2.getString(4)%> <%=rs2.getString(5)%> <%=rs2.getString(6)%> <%=rs2.getString(7)%> <%=rs2.getString(8)%> <%=rs2.getString(9)%>
+								<br>
+								<%
+							} while(rs2.next());
+						}
+					}
 				%>
 		<%
 			}
