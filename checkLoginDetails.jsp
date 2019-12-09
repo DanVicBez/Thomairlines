@@ -22,13 +22,12 @@
 		if(rs.next()) {
 			session.setAttribute("rep", true);
 		} else {
+			session.setAttribute("rep", false);
 			st = con.prepareStatement("SELECT * FROM Admin WHERE username = ?");
 			st.setString(1, username);
 			rs = st.executeQuery();
 			
-			if(rs.next()) {
-				session.setAttribute("admin", true);
-			}
+			session.setAttribute("admin", rs.next());
 		}
 		
 		session.setAttribute("user", username);

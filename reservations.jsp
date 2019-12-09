@@ -27,10 +27,10 @@
 				<%
 				String username = (String) session.getAttribute("user");
 				
-				if(session.getAttribute("rep") != null && session.getAttribute("lookingAtUser") != null) {
+				if((Boolean) session.getAttribute("rep") && session.getAttribute("lookingAtUser") != null) {
 					username = (String) session.getAttribute("lookingAtUser");
 				%>
-					<%=session.getAttribute("lookingAtUser")%>'s Reservations
+					<%=username%>'s Reservations
 				<%
 				} else {
 				%>
@@ -203,10 +203,13 @@
 						Waiting List
 					</font>
 				</p>
-				<%if(session.getAttribute("rep") != null) {%>
-					you are a rep looking at user <%=session.getAttribute("lookingAtUser")%>
-				<%}
-			%>
+				<%if((Boolean) session.getAttribute("rep")) {%>
+					<form action="switchUser.jsp" method="post" id="switchUser">
+						<label style="font-size: 24px" for="user">Switch user</label>
+						<input id="user" name="user" placeholder="Username" required/>
+						<button>Switch</button>
+					</form>
+				<%}%>
 		</div>
 	</body>
 </html>

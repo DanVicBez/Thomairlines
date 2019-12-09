@@ -6,11 +6,11 @@
 	String username = request.getParameter("username");
 	String reserveFor = request.getParameter("reserveFor");
 	
-	if(reserveFor == null || reserveFor.equals("self")) {
+	if(reserveFor.equals("null") || reserveFor.equals("self")) {
 		username = (String) session.getAttribute("user");
 	}
 	
-	System.out.printf("reserving for user '%s'\n", username);
+// 	System.out.printf("reserving for user '%s'\n", username);
 
 	String url = "jdbc:mysql://trs2019.cusoi1lz87e1.us-east-2.rds.amazonaws.com/TravelReservationSystem";
 	Class.forName("com.mysql.jdbc.Driver");
@@ -185,7 +185,7 @@
 		}
 	}
 	
-	if(!reserveFor.equals("self")) {
+	if(reserveFor.equals("other")) {
 		session.setAttribute("lookingAtUser", username);	
 	}
 	session.setAttribute("wait", onWait);

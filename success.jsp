@@ -40,11 +40,11 @@
 					<a href="reservations.jsp">My Reservations</a>
 					<br>
 					<%
-						if(session.getAttribute("rep") != null) { 
+						if((Boolean) session.getAttribute("rep")) { 
 					%>
 							<a href="representative.jsp">Representative Dashboard</a>
 					<%
-						} else if(session.getAttribute("admin") != null) {
+						} else if((Boolean) session.getAttribute("admin")) {
 					%>
 							<a href="administrator.jsp">Administrator Dashboard</a>
 					<%

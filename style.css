@@ -141,3 +141,12 @@ table, th, td {
     border-radius: 10px;
     border: 2px solid black;
 }
+
+#switchUser {
+	background: rgba(255,255,255,.6);
+    width: 20%;
+    margin: 10px auto;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid black;
+}
