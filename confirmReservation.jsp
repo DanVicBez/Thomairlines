@@ -3,18 +3,29 @@
 <%@ page import ="java.time.format.DateTimeFormatter"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%
-	String username = (String)session.getAttribute("user");
+	String username = request.getParameter("username");
+	String reserveFor = request.getParameter("reserveFor");
+	
+	if(reserveFor == null || reserveFor.equals("self")) {
+		username = (String) session.getAttribute("user");
+	}
+	
+	System.out.printf("reserving for user '%s'\n", username);
+
 	String url = "jdbc:mysql://trs2019.cusoi1lz87e1.us-east-2.rds.amazonaws.com/TravelReservationSystem";
 	Class.forName("com.mysql.jdbc.Driver");
 	Connection con = DriverManager.getConnection(url, "admin", "prinfo$9.99");
-	String group1 = "";
-	String group2 = "";
-	if (request.getParameter("group1") != null) {
-		group1 = request.getParameter("group1").replace("/","");
-	}
-	if (request.getParameter("group2") != null) {
-		group2 = request.getParameter("group2").replace("/","");
-	}
+// 	String group1 = "";
+// 	String group2 = "";
+// 	if (request.getParameter("group1") != null) {
+// 		group1 = request.getParameter("group1").replace("/","");
+// 	}
+// 	if (request.getParameter("group2") != null) {
+// 		group2 = request.getParameter("group2").replace("/","");
+// 	}
+	String group1 = request.getParameter("group1");
+	String group2 = request.getParameter("group2");
+
 	String ticketNum = "0";
 	PreparedStatement p = con.prepareStatement("SELECT MAX(ticket_num) FROM Ticket t1");
 	ResultSet pTemp = p.executeQuery();
@@ -172,6 +183,10 @@
 			st.setString(3,rReserveAirline);
 			onWait = true;
 		}
+	}
+	
+	if(!reserveFor.equals("self")) {
+		session.setAttribute("lookingAtUser", username);	
 	}
 	session.setAttribute("wait", onWait);
 	response.sendRedirect("reservations.jsp");

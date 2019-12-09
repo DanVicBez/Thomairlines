@@ -24,7 +24,20 @@
 	%>
 		<div>
 			<font color = "white" size = 6>
-				My Reservations
+				<%
+				String username = (String) session.getAttribute("user");
+				
+				if(session.getAttribute("rep") != null && session.getAttribute("lookingAtUser") != null) {
+					username = (String) session.getAttribute("lookingAtUser");
+				%>
+					<%=session.getAttribute("lookingAtUser")%>'s Reservations
+				<%
+				} else {
+				%>
+					My Reservations
+				<%
+				}
+				%>
 			</font>
 		</div>
 		<div>
@@ -40,7 +53,7 @@
 			</p>
 			<%
 				PreparedStatement temp = con.prepareStatement("SELECT COUNT(*) AS c FROM Reserves NATURAL JOIN Flight NATURAL JOIN Ticket NATURAL JOIN AssociatedWith WHERE d_date < (SELECT CURDATE() + 1) && username = ?;");
-				temp.setString(1, (String)session.getAttribute("user"));
+				temp.setString(1, username);
 				ResultSet rtemp = temp.executeQuery();
 				rtemp.next();
 				if(rtemp.getInt("c") != 0){
@@ -62,7 +75,7 @@
 				</tr>
 				<%
 					PreparedStatement ps=con.prepareStatement("SELECT * FROM Reserves NATURAL JOIN Flight NATURAL JOIN Ticket NATURAL JOIN AssociatedWith WHERE d_date < (SELECT CURDATE() + 1) && username = ?;");
-					ps.setString(1, (String)session.getAttribute("user"));
+					ps.setString(1, username);
 					ResultSet rs = ps.executeQuery();
 				while(rs.next()){
 				%>
@@ -108,7 +121,7 @@
 			</p>
 			<%
 				PreparedStatement temp2 = con.prepareStatement("SELECT COUNT(*) AS c FROM Reserves NATURAL JOIN Flight NATURAL JOIN Ticket NATURAL JOIN AssociatedWith WHERE d_date > (SELECT CURDATE()) && username = ?;");
-				temp2.setString(1, (String)session.getAttribute("user"));
+				temp2.setString(1, username);
 				ResultSet rtemp2 = temp2.executeQuery();
 				rtemp2.next();
 				if(rtemp2.getInt("c") != 0){
@@ -134,7 +147,7 @@
 					</tr>
 					<%
 						PreparedStatement ps2= con.prepareStatement("SELECT * FROM Reserves NATURAL JOIN Flight NATURAL JOIN Ticket NATURAL JOIN AssociatedWith WHERE d_date > (SELECT CURDATE()) && username = ?;");
-						ps2.setString(1, (String)session.getAttribute("user"));
+						ps2.setString(1, username);
 						ResultSet rs2 = ps2.executeQuery();
 						while(rs2.next()){
 							int count = 0;
@@ -177,19 +190,23 @@
 			<%
 				}else{
 			%>
-			<p align = "center">
-				<font color = "white" size = 5>
-					No Upcoming Reservations
-				</font>
-			</p>
-			<%
+				<p align = "center">
+					<font color = "white" size = 5>
+						No Upcoming Reservations
+					</font>
+				</p>
+				<%
 				}
+				%>
+				<p align = "left">
+					<font color = "white" size = 5>
+						Waiting List
+					</font>
+				</p>
+				<%if(session.getAttribute("rep") != null) {%>
+					you are a rep looking at user <%=session.getAttribute("lookingAtUser")%>
+				<%}
 			%>
-			<p align = "left">
-				<font color = "white" size = 5>
-					Waiting List
-				</font>
-			</p>
 		</div>
 	</body>
 </html>

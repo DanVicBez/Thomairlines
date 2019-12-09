@@ -177,6 +177,7 @@
 							</div>
 							<% 
 						} else {
+							int i = 0;
 							one = true;
 							do {
 								%>
@@ -188,7 +189,7 @@
 											<td style="width: 5%">&rarr;</td>
 											<td style="width: 13%"><%=rs.getString("a_airport_id")%></td>
 											<td style="width: 10%">$<%=rs.getInt("price")%></td>
-											<td style="width: 19%; text-align: center">Reserve Flight</td>
+											<td style="width: 19%; text-align: center"><label for="1radio<%=i%>">Reserve Flight</label></td>
 										</tr>
 										<tr>
 											<td>Number Of Stops: <%=rs.getString("stops")%></td>
@@ -196,11 +197,12 @@
 											<td></td>
 											<td><%=rs.getString("arrival_time").substring(0,5)%></td>
 											<td></td>
-											<td style="text-align: center"><input type="radio" value =<%=rs.getString("airline_id") + rs.getString("flight_num")%> required name = "group1"/></td>
+											<td style="text-align: center"><input type="radio" value =<%=rs.getString("airline_id") + rs.getString("flight_num")%> id="1radio<%=i%>" required name="group1"/></td>
 										</tr>
 									</table>
 								</div>
 								<%
+								i++;
 							} while(rs.next());
 						}
 						
@@ -216,6 +218,7 @@
 								</div>
 								<%
 							} else {
+								int i = 0;
 								two = true;
 								do {
 									%>
@@ -227,7 +230,7 @@
 												<td style="width: 5%">&rarr;</td>
 												<td style="width: 13%"><%=rs2.getString("a_airport_id")%></td>
 												<td style="width: 10%">$<%=rs2.getInt("price")%></td>
-												<td style="width: 19%; text-align: center">Reserve Flight</td>
+												<td style="width: 19%; text-align: center"><label for="2radio<%=i%>">Reserve Flight</label></td>
 											</tr>
 											<tr>
 												<td>Number Of Stops: <%=rs2.getString("stops")%></td>
@@ -235,18 +238,31 @@
 												<td></td>
 												<td><%=rs2.getString("arrival_time").substring(0,5)%></td>
 												<td></td>
-												<td style="text-align: center"><input type="radio" required value =<%=rs2.getString("airline_id") + rs2.getString("flight_num")%> name = "group2"/></td>
+												<td style="text-align: center"><input type="radio" required value =<%=rs2.getString("airline_id") + rs2.getString("flight_num")%> id="2radio<%=i%>" name = "group2"/></td>
 											</tr>
 										</table>
 									</div>
 									<%
+									i++;
 								} while(rs2.next());
 							}
 						}
 					}
 					if (one || two) {
 					%>
-					<button>Reserve Flight(s)</button>
+						<div id="reserve">
+							<button>Reserve Flight(s)</button>
+							<%
+							if(session.getAttribute("rep") != null) {
+							%>
+							<p>Reserve flights for:</p>
+							<input onclick="document.getElementById('username').disabled = true;" type="radio" name="reserveFor" id="radioSelf" value="self" required><label for="radioSelf">Myself</label><br>
+							<input onclick="document.getElementById('username').disabled = false;" type="radio" name="reserveFor" id="radioOther" value="other" required><label for="radioOther">Another user:</label>
+							<input type="text" id="username" name="username" placeholder="Username" disabled required/>
+							<%
+							}
+							%>
+						</div>
 					<%
 					}
 					%>

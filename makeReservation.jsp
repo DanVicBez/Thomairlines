@@ -40,8 +40,10 @@
 					<option>Business (+$150)</option>
 					<option>First (+$300)</option>
 				</select>
-				<input type = "hidden" name = "group1" value = <%=request.getParameter("group1")%>/>
-				<input type = "hidden" name = "group2" value = <%=request.getParameter("group2")%>/>
+				<input type = "hidden" name = "reserveFor" value ="<%=request.getParameter("reserveFor")%>"/>
+				<input type = "hidden" name = "username" value ="<%=request.getParameter("username")%>"/>
+				<input type = "hidden" name = "group1" value = "<%=request.getParameter("group1")%>"/>
+				<input type = "hidden" name = "group2" value = "<%=request.getParameter("group2")%>"/>
 				<button>Reserve</button>
 			</form>
 		</div>

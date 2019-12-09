@@ -6,6 +6,10 @@ body {
 	margin: 0;
 }
 
+p {
+	margin: 5px auto;
+}
+
 #banner {
 	background: #0b20d9;
 	margin-bottom: 50px;
@@ -17,6 +21,12 @@ h1 {
 	color: #99c6cf;
 	display: inline;
 	margin: 0;
+}
+
+h2 {
+	text-align: center;
+	color: white;
+	font-size: 48px;
 }
 
 div, form {
@@ -50,6 +60,11 @@ input:not([type='checkbox']):not([type='radio']) {
 	width: 240px;
 	height: 30px;
 	font-size: 22px;
+}
+
+.result input[type='radio'] {
+	margin: 10px auto;
+	transform: scale(2);
 }
 
 button {
@@ -110,4 +125,19 @@ table, th, td {
 .section {
 	display: block;
 	color: white;
+}
+
+#username {
+	width: 100px;
+	height: 20px;
+	font-size: 14px;
+}
+
+#reserve {
+    background: rgba(255,255,255,.6);
+    width: 20%;
+    margin: 10px auto;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid black;
 }
