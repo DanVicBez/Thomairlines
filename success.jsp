@@ -252,16 +252,12 @@
 					%>
 						<div id="reserve">
 							<button>Reserve Flight(s)</button>
-							<%
-							if(session.getAttribute("rep") != null) {
-							%>
-							<p>Reserve flights for:</p>
-							<input onclick="document.getElementById('username').disabled = true;" type="radio" name="reserveFor" id="radioSelf" value="self" required><label for="radioSelf">Myself</label><br>
-							<input onclick="document.getElementById('username').disabled = false;" type="radio" name="reserveFor" id="radioOther" value="other" required><label for="radioOther">Another user:</label>
-							<input type="text" id="username" name="username" placeholder="Username" disabled required/>
-							<%
-							}
-							%>
+							<%if((Boolean) session.getAttribute("rep")) {%>
+								<p>Reserve flights for:</p>
+								<input onclick="document.getElementById('username').disabled = true;" type="radio" name="reserveFor" id="radioSelf" value="self" required><label for="radioSelf">Myself</label><br>
+								<input onclick="document.getElementById('username').disabled = false;" type="radio" name="reserveFor" id="radioOther" value="other" required><label for="radioOther">Another user:</label>
+								<input type="text" id="username" name="username" placeholder="Username" disabled required/>
+							<%}%>
 						</div>
 					<%
 					}
