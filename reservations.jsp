@@ -30,7 +30,7 @@
 		<div>
 			<p align = "left">
 				<font color = "white" size = 4>
-					<a href = 'success.jsp'>Back to Flight Search --></a>
+					<a href = 'success.jsp'>Back to Flight Search</a>
 				</font>
 			</p>
 			<p align = "left">
@@ -40,7 +40,7 @@
 			</p>
 			<%
 				PreparedStatement temp = con.prepareStatement("SELECT COUNT(*) AS c FROM Reserves NATURAL JOIN Flight NATURAL JOIN Ticket WHERE d_date < (SELECT CURDATE() + 1) && username = ?;");
-				temp.setString(1, (String)session.getAttribute("username"));
+				temp.setString(1, (String)session.getAttribute("user"));
 				ResultSet rtemp = temp.executeQuery();
 				rtemp.next();
 				if(rtemp.getInt("c") != 0){
@@ -62,7 +62,7 @@
 				</tr>
 				<%
 					PreparedStatement ps=con.prepareStatement("SELECT * FROM Reserves NATURAL JOIN Flight NATURAL JOIN Ticket WHERE d_date < (SELECT CURDATE() + 1) && username = ?;");
-					ps.setString(1, (String)session.getAttribute("username"));
+					ps.setString(1, (String)session.getAttribute("user"));
 					ResultSet rs = ps.executeQuery();
 				while(rs.next()){
 				%>
@@ -104,7 +104,7 @@
 			</p>
 			<%
 				PreparedStatement temp2 = con.prepareStatement("SELECT COUNT(*) AS c FROM Reserves NATURAL JOIN Flight NATURAL JOIN Ticket WHERE d_date > (SELECT CURDATE()) && username = ?;");
-				temp2.setString(1, (String)session.getAttribute("username"));
+				temp2.setString(1, (String)session.getAttribute("user"));
 				ResultSet rtemp2 = temp2.executeQuery();
 				rtemp2.next();
 				if(rtemp2.getInt("c") != 0){
@@ -128,7 +128,7 @@
 				</tr>
 				<%
 					PreparedStatement ps2= con.prepareStatement("SELECT * FROM Reserves NATURAL JOIN Flight NATURAL JOIN Ticket WHERE d_date > (SELECT CURDATE()) && username = ?;");
-					ps2.setString(1, (String)session.getAttribute("username"));
+					ps2.setString(1, (String)session.getAttribute("user"));
 					ResultSet rs2 = ps2.executeQuery();
 					while(rs2.next()){
 				%>

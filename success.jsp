@@ -17,6 +17,10 @@
 		</style>
 	</head>
 	<body>
+		<%
+		boolean one = false;
+		boolean two = false;
+		%>
 		<div id="banner">
 			<img alt="Thomairlines" src="https://i.imgur.com/NfZWVqI.jpg" width=55px style="display: inline"/>
 			<h1>Thomairlines</h1>
@@ -37,6 +41,9 @@
 					<br>
 					<br>
 					<a href="logout.jsp">Log out</a>
+					<br>
+					<br>
+					<br>
 				</div>
 				<form method="post" action="search.jsp" align="center" >
 					<table align="center">
@@ -101,21 +108,51 @@
 						<option>Round-Trip</option>
 						<option>One-Way</option>
 					</select>
+					<input type="checkbox" name = "flexibility"/>Flexible Dates
 					<select id = 'sortBy' required name = "sortBy">
 						<option selected>Not Sorted</option>
-						<option>Sort By Price</option>
-						<option>Sort By Take-Off Time</option>
-						<option>Sort By Landing Time</option>
+						<option>Price Sort</option>
+						<option>Take-Off Time Sort</option>
+						<option>Landing Time Sort</option>
 					</select>
-					<select id = 'filterBy' required name = "filterBy">
-						<option selected>Not Filtered</option>
-						<option>Filter By Price</option>
-						<option>Filter By Number of Stops</option>
-						<option>Filter By Airline</option>
-					</select>
-					<input type="checkbox" name = "flexibility"/>Flexible Dates
+					<input type="checkbox" name = "reverse"/>Desc. Sort
+					<table style="display:inline-table;">
+						<tr>
+							<td id = 'filtertd'>						
+								<select id = 'filterByPrice' required name = "filterByPrice">
+									<option selected>Price Filter</option>
+									<option>Price &lt; $250</option>
+									<option>Price &lt; $500</option>
+									<option>Price &lt; $750</option>
+									<option>Price &lt; $1000</option>
+									<option>Price &lt; $1500</option>
+								</select>
+							</td>
+							<td id = 'filtertd'>
+								<select id = 'filterByStops' required name = "filterByStops">
+									<option selected>Stop Filter</option>
+									<option>At Most 1 Stop</option>
+									<option>At Most 2 Stops</option>
+								</select>
+							</td>
+							<td id = 'filtertd'>
+								<select id = 'filterByAirline' required name = "filterByAirline">
+									<option selected>Airline Filter</option>
+									<%
+									rs=con.prepareStatement("SELECT * FROM Airline").executeQuery();
+									while(rs.next()) {
+											%>
+												<option><%=rs.getString(1)%> (<%=rs.getString(2)%>)</option>
+											<%
+										}
+									%>
+								</select>
+							</td>
+						</tr>
+					</table>
 					<button>Search</button>
 				</form>
+				<form method="post" onsubmit= "displayRadioValue()" action="makeReservation.jsp" align="center">
 				<%
 					rs = (ResultSet) session.getAttribute("results");
 					if(rs != null) {
@@ -129,6 +166,7 @@
 							</div>
 							<% 
 						} else {
+							one = true;
 							do {
 								%>
 								<div class="result">
@@ -139,13 +177,15 @@
 											<td style="width: 5%">&rarr;</td>
 											<td style="width: 13%"><%=rs.getString("a_airport_id")%></td>
 											<td style="width: 10%">$<%=rs.getInt("price")%></td>
-											<td style="width: 19%">Reserve Flight</td>
+											<td style="width: 19%; text-align: center">Reserve Flight</td>
 										</tr>
 										<tr>
-											<td></td>
+											<td>Number Of Stops: <%=rs.getString("stops")%></td>
 											<td style="text-align: right"><%=rs.getString("departure_time").substring(0,5)%></td>
 											<td></td>
 											<td><%=rs.getString("arrival_time").substring(0,5)%></td>
+											<td></td>
+											<td style="text-align: center"><input type="radio" value =<%=rs.getString("airline_id") + rs.getString("flight_num")%> required name = "group1"/></td>
 										</tr>
 									</table>
 								</div>
@@ -165,6 +205,7 @@
 								</div>
 								<%
 							} else {
+								two = true;
 								do {
 									%>
 									<div class="result">
@@ -175,13 +216,15 @@
 												<td style="width: 5%">&rarr;</td>
 												<td style="width: 13%"><%=rs2.getString("a_airport_id")%></td>
 												<td style="width: 10%">$<%=rs2.getInt("price")%></td>
-												<td style="width: 19%">Reserve Flight</td>
+												<td style="width: 19%; text-align: center">Reserve Flight</td>
 											</tr>
 											<tr>
-												<td></td>
+												<td>Number Of Stops: <%=rs2.getString("stops")%></td>
 												<td style="text-align: right"><%=rs2.getString("departure_time").substring(0,5)%></td>
 												<td></td>
 												<td><%=rs2.getString("arrival_time").substring(0,5)%></td>
+												<td></td>
+												<td style="text-align: center"><input type="radio" required value =<%=rs2.getString("airline_id") + rs2.getString("flight_num")%> name = "group2"/></td>
 											</tr>
 										</table>
 									</div>
@@ -190,6 +233,14 @@
 							}
 						}
 					}
+					if (one || two) {
+					%>
+					<button>Reserve Flight(s)</button>
+					<%
+					}
+					%>
+				</form>
+				<%
 			}
 		%>
 		<script>
@@ -201,5 +252,28 @@
 			}
 		}
 		</script>
+		<script> 
+        function displayRadioValue() { 
+            var elements1 = document.getElementsByName('group1');
+            var elements2 = document.getElementsByName('group2');
+            if (elements1 != null) {
+            	for(i = 0; i < elements1.length; i++) { 
+                    if(elements1[i].checked) {
+                    	document.getElementByName('group1').setAttribute('value',elements1[i].value);
+                    }
+                   
+                } 
+            } else if (elements2 != null) {
+            	for(i = 0; i < elements2.length; i++) { 
+                    if(elements2[i].checked) {
+                    	document.getElementByName('group2').setAttribute('value',elements2[i].value);
+                    }
+                    
+                } 
+            }
+            
+        } 
+    	</script> 
+		
 	</body>
 </html>

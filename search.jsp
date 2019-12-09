@@ -15,20 +15,30 @@
 	String toDate = request.getParameter("toDate");
 	String flightType = request.getParameter("flightType");
 	String sortBy = request.getParameter("sortBy");
-	String filterBy = request.getParameter("filterBy");
+	String filterByPrice = request.getParameter("filterByPrice");
+	String filterByStop = request.getParameter("filterByStops");
+	String filterByAirline = request.getParameter("filterByAirline");
 	boolean reverse = "on".equals(request.getParameter("reverse"));
 	boolean flex = "on".equals(request.getParameter("flexibility"));
 	
 	String query = "SELECT * " +
 				   "FROM Flight NATURAL JOIN Airline " +
 				   "WHERE d_airport_id = ? AND a_airport_id = ?" + (flex ? "" : " AND days LIKE ?");
-
+	if (!filterByPrice.equals("Price Filter")) {
+		query += " AND price < " + filterByPrice.substring(9);
+	}
+	if (!filterByAirline.equals("Airline Filter")) {
+		query += " AND airline_id = '" + filterByAirline.substring(0,2) + "'";
+	}
+	if (!filterByStop.equals("Stop Filter")) {
+		query += " AND stops <= " + filterByStop.substring(8,9);
+	}
 	if(!"Not Sorted".equals(sortBy)) {
-		if("Sort By Price".equals(sortBy)) {
+		if("Price Sort".equals(sortBy)) {
 			query += " ORDER BY price";
-		} else if("Sort By Take-Off Time".equals(sortBy)) {
+		} else if("Take-Off Time Sort".equals(sortBy)) {
 			query += " ORDER BY departure_time";
-		} else if("Sort By Landing Time".equals(sortBy)) {
+		} else if("Landing Time Sort".equals(sortBy)) {
 			query += " ORDER BY arrival_time";
 		}
 
