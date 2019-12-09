@@ -109,60 +109,63 @@
 				rtemp2.next();
 				if(rtemp2.getInt("c") != 0){
 			%>
-			<table id = table1 style="background-color:skyblue">
-				<tr id = header>
-					<th>Flight Number</th>
-					<th>Ticket Number</th>
-					<th>Airline</th>
-					<th>Departing Airport</th>
-					<th>Arriving Airport</th>
-					<th>Departure Date</th>
-					<th>Departure Time</th>
-					<th>Arrival Time</th>
-					<th>Seat Number</th>
-					<th>Class</th>
-					<th>Purchase Time</th>
-					<th>Price</th>
-					<th>Cancel?</th>
-					<th></th>
-				</tr>
-				<%
-					PreparedStatement ps2= con.prepareStatement("SELECT * FROM Reserves NATURAL JOIN Flight NATURAL JOIN Ticket NATURAL JOIN AssociatedWith WHERE d_date > (SELECT CURDATE()) && username = ?;");
-					ps2.setString(1, (String)session.getAttribute("user"));
-					ResultSet rs2 = ps2.executeQuery();
-					while(rs2.next()){
-						int count = 0;
-						count++;
-				%>
-				<tr id = row<%=count%>>
-					<td id = col1><%= rs2.getInt("flight_num")%></td>
-					<td id = col2><%= rs2.getInt("ticket_num")%></td>
-					<td id = col3><%= rs2.getString("airline_id")%></td>
-					<td id = col4><%= rs2.getString("d_airport_id")%></td>
-					<td id = col5><%= rs2.getString("a_airport_id")%></td>
-					<td id = col6><%= rs2.getString("d_date")%></td>
-					<td id = col7><%= rs2.getString("departure_time")%></td>
-					<td id = col8><%= rs2.getString("arrival_time")%></td>
-					<td id = col9><%= rs2.getInt("seat_num")%></td>
-					<td id = col10><%= rs2.getString("ticket_type")%></td>
-					<td id = col11><%= rs2.getString("purchase_time")%></td>
-					<td id = col12><%= rs2.getInt("total_fare")%></td>
+			<form method="post" action="cancel.jsp">
+				<input id="flightInfo" name="flightInfo" type="hidden" value=""/>
+				<table id = table1 style="background-color:skyblue">
+					<tr id = header>
+						<th>Flight Number</th>
+						<th>Ticket Number</th>
+						<th>Airline</th>
+						<th>Departing Airport</th>
+						<th>Arriving Airport</th>
+						<th>Departure Date</th>
+						<th>Departure Time</th>
+						<th>Arrival Time</th>
+						<th>Seat Number</th>
+						<th>Class</th>
+						<th>Purchase Time</th>
+						<th>Price</th>
+						<th>Cancel?</th>
+						<th></th>
+					</tr>
 					<%
-					if(rs2.getString("ticket_type").equals("Economy")){
+						PreparedStatement ps2= con.prepareStatement("SELECT * FROM Reserves NATURAL JOIN Flight NATURAL JOIN Ticket NATURAL JOIN AssociatedWith WHERE d_date > (SELECT CURDATE()) && username = ?;");
+						ps2.setString(1, (String)session.getAttribute("user"));
+						ResultSet rs2 = ps2.executeQuery();
+						while(rs2.next()){
+							int count = 0;
+							count++;
 					%>
-					<td id = col13><button  id = button<%=count%> onClick="window.location.reload();"> Pay $40 and Cancel </button></td>
+					<tr id = row<%=count%>>
+						<td id = col1><%= rs2.getInt("flight_num")%></td>
+						<td id = col2><%= rs2.getInt("ticket_num")%></td>
+						<td id = col3><%= rs2.getString("airline_id")%></td>
+						<td id = col4><%= rs2.getString("d_airport_id")%></td>
+						<td id = col5><%= rs2.getString("a_airport_id")%></td>
+						<td id = col6><%= rs2.getString("d_date")%></td>
+						<td id = col7><%= rs2.getString("departure_time")%></td>
+						<td id = col8><%= rs2.getString("arrival_time")%></td>
+						<td id = col9><%= rs2.getInt("seat_num")%></td>
+						<td id = col10><%= rs2.getString("ticket_type")%></td>
+						<td id = col11><%= rs2.getString("purchase_time")%></td>
+						<td id = col12><%= rs2.getInt("total_fare")%></td>
+						<%
+						if(rs2.getString("ticket_type").equals("Economy")){
+						%>
+						<td id = col13><button value=<%=rs2.getInt("ticket_num") + "," + rs2.getInt("flight_num") + "," + rs2.getString("airline_id")%> name=button<%=count%> onClick="document.getElementById('flightInfo').value = this.value"> Pay $40 and Cancel </button></td>
+						<%
+							}else{
+						%>
+						<td id = col13><button value=<%=rs2.getInt("ticket_num") + "," + rs2.getInt("flight_num") + "," + rs2.getString("airline_id")%> name=button<%=count%> onClick="document.getElementById('flightInfo').value = this.value"> Cancel </button></td>
+						<%
+							}
+						%>
+					</tr>
 					<%
-						}else{
+					}
 					%>
-					<td id = col13><button id = button<%=count%> onClick="window.location.reload();"> Cancel </button></td>
-					<%
-						}
-					%>
-				</tr>
-				<%
-				}
-				%>
-			</table>
+				</table>
+			</form>
 			<%
 				}else{
 			%>
