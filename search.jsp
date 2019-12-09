@@ -72,6 +72,7 @@
 
 	session.setAttribute("results", rs);
 	session.setAttribute("results2", rs2);
+	session.setAttribute("fromDate", request.getParameter("fromDate"));
 	response.sendRedirect("success.jsp");
 %>
 <br>
