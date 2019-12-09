@@ -4,7 +4,7 @@
 <%@page import="java.text.SimpleDateFormat"%>
 <html>
 	<head>
-		<title>Login Form</title>
+		<title>Thomairlines</title>
 		<link rel="stylesheet" href="style.css"/>
 		<meta charset="utf-8"/>
 		<style>
@@ -39,6 +39,17 @@
 					<br>
 					<a href="reservations.jsp">My Reservations</a>
 					<br>
+					<%
+						if(session.getAttribute("rep") != null) { 
+					%>
+							<a href="representative.jsp">Representative Dashboard</a>
+					<%
+						} else if(session.getAttribute("admin") != null) {
+					%>
+							<a href="administrator.jsp">Administrator Dashboard</a>
+					<%
+						}
+					%>
 					<br>
 					<a href="logout.jsp">Log out</a>
 					<br>
