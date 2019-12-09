@@ -104,7 +104,7 @@
 						<td id = col11><%= rs2.getString("purchase_time")%></td>
 						<td id = col12>$<%= rs2.getInt("total_fare")%></td>
 						<%
-						if(rs2.getString("ticket_type").equals("Economy")){
+						if(rs2.getString("ticket_type").equals("economy")){
 						%>
 						<td id = col13><button value=<%=rs2.getInt("ticket_num") + "," + rs2.getInt("flight_num") + "," + rs2.getString("airline_id")%> name=button<%=count%> onClick="document.getElementById('flightInfo').value = this.value"> Pay $40 and Cancel </button></td>
 						<%
