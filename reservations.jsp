@@ -46,72 +46,6 @@
 					<a href = 'success.jsp'>Back to Flight Search</a>
 				</font>
 			</p>
-			<p align = "left">
-				<font color = "white" size = 5>
-					Past Reservations
-				</font>
-			</p>
-			<%
-				PreparedStatement temp = con.prepareStatement("SELECT COUNT(*) AS c FROM Reserves NATURAL JOIN Flight NATURAL JOIN Ticket NATURAL JOIN AssociatedWith WHERE d_date < (SELECT CURDATE() + 1) && username = ?;");
-				temp.setString(1, username);
-				ResultSet rtemp = temp.executeQuery();
-				rtemp.next();
-				if(rtemp.getInt("c") != 0){
-			%>
-			<table style="background-color:skyblue">
-				<tr>
-					<th>Flight Number</th>
-					<th>Ticket Number</th>
-					<th>Airline</th>
-					<th>Departing Airport</th>
-					<th>Arriving Airport</th>
-					<th>Departure Date</th>
-					<th>Departure Time</th>
-					<th>Arrival Time</th>
-					<th>Seat Number</th>
-					<th>Class</th>
-					<th>Purchase Time</th>
-					<th>Price</th>
-				</tr>
-				<%
-					PreparedStatement ps=con.prepareStatement("SELECT * FROM Reserves NATURAL JOIN Flight NATURAL JOIN Ticket NATURAL JOIN AssociatedWith WHERE d_date < (SELECT CURDATE() + 1) && username = ?;");
-					ps.setString(1, username);
-					ResultSet rs = ps.executeQuery();
-				while(rs.next()){
-				%>
-				<tr>
-					<td><%= rs.getInt("flight_num")%></td>
-					<td><%= rs.getInt("ticket_num")%></td>
-					<td><%= rs.getString("airline_id")%></td>
-					<td><%= rs.getString("d_airport_id")%></td>
-					<td><%= rs.getString("a_airport_id")%></td>
-					<td><%= rs.getString("d_date")%></td>
-					<td><%= rs.getString("departure_time")%></td>
-					<td><%= rs.getString("arrival_time")%></td>
-					<td><%= rs.getInt("seat_num")%></td>
-					<% 
-					String tempS = rs.getString("ticket_type");
-					tempS = tempS.substring(0,1).toUpperCase() + tempS.substring(1);
-					%>
-					<td><%= tempS %></td>
-					<td><%= rs.getString("purchase_time")%></td>
-					<td>$<%= rs.getInt("total_fare")%></td>
-				</tr>
-				<%
-				}
-				%>
-			</table>
-			<%
-				}else{
-			%>
-			<p align = "center">
-				<font color = "white" size = 5>
-					No Past Reservations
-				</font>
-			</p>
-			<%
-				}
-			%>
 		</div>
 		<div>
 			<p align = "left">
@@ -198,18 +132,140 @@
 				<%
 				}
 				%>
+		</div>
+		<div>
 				<p align = "left">
 					<font color = "white" size = 5>
 						Waiting List
 					</font>
 				</p>
-				<%if((Boolean) session.getAttribute("rep")) {%>
-					<form action="switchUser.jsp" method="post" id="switchUser">
-						<label style="font-size: 24px" for="user">Switch user</label>
-						<input id="user" name="user" placeholder="Username" required/>
-						<button>Switch</button>
-					</form>
-				<%}%>
+		</div>
+				<%
+				PreparedStatement temp3 = con.prepareStatement("SELECT COUNT(*) AS c FROM OnWaitingList NATURAL JOIN Flight WHERE username = ?;");
+				temp3.setString(1, username);
+				ResultSet rtemp3 = temp3.executeQuery();
+				rtemp3.next();
+				if(rtemp3.getInt("c") != 0){
+				%>
+				<table style ="margin: 0 auto;" style="background-color:skyblue">
+				<tr>
+					<th>Flight Number</th>
+					<th>Airline</th>
+					<th>Departing Airport</th>
+					<th>Arriving Airport</th>
+					<th>Departure Time</th>
+					<th>Arrival Time</th>
+					<th>Price</th>
+					
+				</tr>
+				<%
+					temp3 = con.prepareStatement("SELECT * FROM OnWaitingList NATURAL JOIN Flight WHERE username = ? && flight_num = flight_number;");
+					temp3.setString(1, username);
+					rtemp3 = temp3.executeQuery();
+				while(rtemp3.next()){
+				%>
+				<tr>
+					<td><%= rtemp3.getInt("flight_num")%></td>
+					<td><%= rtemp3.getString("airline_id")%></td>
+					<td><%= rtemp3.getString("d_airport_id")%></td>
+					<td><%= rtemp3.getString("a_airport_id")%></td>
+					<td><%= rtemp3.getString("departure_time")%></td>
+					<td><%= rtemp3.getString("arrival_time")%></td>
+					<%
+					String price = rtemp3.getString("price");
+					int index = price.indexOf('.');
+					price = price.substring(0, index);
+					%>
+					<td>$<%= price%></td>
+				</tr>
+				<%
+				}
+				%>
+			</table>
+			<%
+				}else{
+			%>	
+				<p align = "center">
+					<font size = 5 color = "white">
+						Not Currently on a Waiting List
+					</font>
+				</p>
+				<% 
+				}
+			%>
+		</div>
+		<div>
+			<p align = "left">
+				<font color = "white" size = 5>
+					Past Reservations
+				</font>
+			</p>
+			<%
+				PreparedStatement temp = con.prepareStatement("SELECT COUNT(*) AS c FROM Reserves NATURAL JOIN Flight NATURAL JOIN Ticket NATURAL JOIN AssociatedWith WHERE d_date < (SELECT CURDATE() + 1) && username = ?;");
+				temp.setString(1, username);
+				ResultSet rtemp = temp.executeQuery();
+				rtemp.next();
+				if(rtemp.getInt("c") != 0){
+			%>
+			<table style="background-color:skyblue">
+				<tr>
+					<th>Flight Number</th>
+					<th>Ticket Number</th>
+					<th>Airline</th>
+					<th>Departing Airport</th>
+					<th>Arriving Airport</th>
+					<th>Departure Date</th>
+					<th>Departure Time</th>
+					<th>Arrival Time</th>
+					<th>Seat Number</th>
+					<th>Class</th>
+					<th>Purchase Time</th>
+					<th>Price</th>
+				</tr>
+				<%
+					PreparedStatement ps=con.prepareStatement("SELECT * FROM Reserves NATURAL JOIN Flight NATURAL JOIN Ticket NATURAL JOIN AssociatedWith WHERE d_date < (SELECT CURDATE() + 1) && username = ?;");
+					ps.setString(1, username);
+					ResultSet rs = ps.executeQuery();
+				while(rs.next()){
+				%>
+				<tr>
+					<td><%= rs.getInt("flight_num")%></td>
+					<td><%= rs.getInt("ticket_num")%></td>
+					<td><%= rs.getString("airline_id")%></td>
+					<td><%= rs.getString("d_airport_id")%></td>
+					<td><%= rs.getString("a_airport_id")%></td>
+					<td><%= rs.getString("d_date")%></td>
+					<td><%= rs.getString("departure_time")%></td>
+					<td><%= rs.getString("arrival_time")%></td>
+					<td><%= rs.getInt("seat_num")%></td>
+					<% 
+					String tempS = rs.getString("ticket_type");
+					tempS = tempS.substring(0,1).toUpperCase() + tempS.substring(1);
+					%>
+					<td><%= tempS %></td>
+					<td><%= rs.getString("purchase_time")%></td>
+					<td>$<%= rs.getInt("total_fare")%></td>
+				</tr>
+				<%
+				}
+				%>
+			</table>
+			<%
+				}else{
+			%>
+			<p align = "center">
+				<font color = "white" size = 5>
+					No Past Reservations
+				</font>
+			</p>
+			<%	}
+				if((Boolean) session.getAttribute("rep")) {%>
+				<form action="switchUser.jsp" method="post" id="switchUser">
+					<label style="font-size: 24px" for="user">Switch user</label>
+					<input id="user" name="user" placeholder="Username" required/>
+					<button>Switch</button>
+				</form>
+			<%}%>
 		</div>
 	</body>
 </html>
