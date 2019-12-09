@@ -186,6 +186,11 @@
 			<%
 				}
 			%>
+			<p align = "left">
+				<font color = "white" size = 5>
+					Waiting List
+				</font>
+			</p>
 		</div>
 	</body>
 </html>

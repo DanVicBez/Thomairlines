@@ -21,7 +21,7 @@
 		pss.setInt(1, Integer.valueOf(info[1]));
 		pss.setString(2, info[2]);
 		pss.executeUpdate();
-	}else if(ticketType.equals("first-class")){
+	}else if(ticketType.equals("first")){
 		pss = con.prepareStatement("UPDATE Seat SET first_class = first_class - 1 WHERE flight_num = ? && airline_id = ?;");
 		pss.setInt(1, Integer.valueOf(info[1]));
 		pss.setString(2, info[2]);

@@ -155,13 +155,13 @@
 			}
 			st.setString(6,"40");
 			st.setString(7,username);
-			st.setString(10,(String)session.getAttribute("fromDate"));
+			st.setString(10,(String)session.getAttribute("toDate"));
 			st.executeUpdate();
 			
 			st = con.prepareStatement(String.format("INSERT INTO AssociatedWith VALUES (%s,?,?,?,?)", ticketNum));
 			st.setString(1,rReserveFlightNumber);
 			st.setString(2,rReserveAirline);
-			st.setString(3,(String)session.getAttribute("fromDate"));
+			st.setString(3,(String)session.getAttribute("toDate"));
 			st.setString(4,request.getParameter("meal").toLowerCase());
 			st.executeUpdate();
 		} else {
