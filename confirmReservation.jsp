@@ -22,7 +22,8 @@
 	if (pTemp.getString(1) != null) {
 		ticketNum = pTemp.getString(1);
 	}
-	if (group1.length() > 2) {
+	boolean onWait = false;
+	if (!group1.equals("null") && group1.length() > 2) {
 		String dReserveAirline = group1.substring(0,2);
 		String dReserveFlightNumber = group1.substring(2);
 		
@@ -91,9 +92,14 @@
 			st.executeUpdate();
 		} else {
 			//waiting list
+			PreparedStatement st = con.prepareStatement("INSERT INTO OnWaitingList VALUES (?,?,?)");
+			st.setString(1,username);
+			st.setString(2,dReserveFlightNumber);
+			st.setString(3,dReserveAirline);
+			onWait = true;
 		}
 	}
-	if (group2.length() > 2) {
+	if (!group2.equals("null") && group2.length() > 2) {
 		String rReserveAirline = group2.substring(0,2);
 		String rReserveFlightNumber = group2.substring(2);
 		
@@ -160,8 +166,13 @@
 			st.executeUpdate();
 		} else {
 			//waiting list
+			PreparedStatement st = con.prepareStatement("INSERT INTO OnWaitingList VALUES (?,?,?)");
+			st.setString(1,username);
+			st.setString(2,rReserveFlightNumber);
+			st.setString(3,rReserveAirline);
+			onWait = true;
 		}
 	}
-	
+	session.setAttribute("wait", onWait);
 	response.sendRedirect("reservations.jsp");
 %>
