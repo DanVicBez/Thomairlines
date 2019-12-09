@@ -154,8 +154,7 @@
 						String tempS = rs2.getString("ticket_type");
 						tempS = tempS.substring(0,1).toUpperCase() + tempS.substring(1);
 						%>
-						<td><%= tempS %></td>
-						<td id = col10><%= rs2.getString("ticket_type")%></td>
+						<td id = col10><%= tempS %></td>
 						<td id = col11><%= rs2.getString("purchase_time")%></td>
 						<td id = col12>$<%= rs2.getInt("total_fare")%></td>
 						<%
