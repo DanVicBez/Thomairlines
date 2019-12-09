@@ -76,9 +76,13 @@
 					<td><%= rs.getString("departure_time")%></td>
 					<td><%= rs.getString("arrival_time")%></td>
 					<td><%= rs.getInt("seat_num")%></td>
-					<td><%= rs.getString("ticket_type")%></td>
+					<% 
+					String tempS = rs.getString("ticket_type");
+					tempS = tempS.substring(0,1).toUpperCase() + tempS.substring(1);
+					%>
+					<td><%= tempS %></td>
 					<td><%= rs.getString("purchase_time")%></td>
-					<td><%= rs.getInt("total_fare")%></td>
+					<td>$<%= rs.getInt("total_fare")%></td>
 				</tr>
 				<%
 				}
@@ -146,9 +150,14 @@
 						<td id = col7><%= rs2.getString("departure_time")%></td>
 						<td id = col8><%= rs2.getString("arrival_time")%></td>
 						<td id = col9><%= rs2.getInt("seat_num")%></td>
+						<% 
+						String tempS = rs2.getString("ticket_type");
+						tempS = tempS.substring(0,1).toUpperCase() + tempS.substring(1);
+						%>
+						<td><%= tempS %></td>
 						<td id = col10><%= rs2.getString("ticket_type")%></td>
 						<td id = col11><%= rs2.getString("purchase_time")%></td>
-						<td id = col12><%= rs2.getInt("total_fare")%></td>
+						<td id = col12>$<%= rs2.getInt("total_fare")%></td>
 						<%
 						if(rs2.getString("ticket_type").equals("Economy")){
 						%>
