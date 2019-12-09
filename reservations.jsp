@@ -62,7 +62,7 @@
 			%>
 			<form method="post" action="cancel.jsp">
 				<input id="flightInfo" name="flightInfo" type="hidden" value=""/>
-				<table id = table1 style="background-color:skyblue">
+				<table id = table1 style ="margin: 0 auto;background-color:skyblue">
 					<tr id = header>
 						<th>Flight Number</th>
 						<th>Ticket Number</th>
@@ -77,7 +77,6 @@
 						<th>Purchase Time</th>
 						<th>Price</th>
 						<th>Cancel?</th>
-						<th></th>
 					</tr>
 					<%
 						PreparedStatement ps2= con.prepareStatement("SELECT * FROM Reserves NATURAL JOIN Flight NATURAL JOIN Ticket NATURAL JOIN AssociatedWith WHERE d_date > (SELECT CURDATE()) && username = ?;");
@@ -207,7 +206,7 @@
 				rtemp.next();
 				if(rtemp.getInt("c") != 0){
 			%>
-			<table style="background-color:skyblue">
+			<table style ="margin: 0 auto;" style="background-color:skyblue">
 				<tr>
 					<th>Flight Number</th>
 					<th>Ticket Number</th>
