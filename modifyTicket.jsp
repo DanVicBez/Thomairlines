@@ -20,7 +20,7 @@
 		System.out.printf("Updated %d rows\n", ps.executeUpdate());
 	}
 	
-	session.setAttribute("error", "");
+	session.setAttribute("error", "null");
 	
 	if(!ticketType.isEmpty()) {
 		ps = con.prepareStatement("SELECT flight_num, airline_id FROM AssociatedWith WHERE ticket_num = ?");

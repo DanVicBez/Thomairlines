@@ -29,6 +29,11 @@ h2 {
 	font-size: 48px;
 }
 
+h3 {
+	font-size: 32px;
+	margin: 10px;
+}
+
 div, form {
 	text-align: center;
 }
@@ -141,4 +146,26 @@ table, th, td {
     padding: 10px;
     border-radius: 10px;
     border: 2px solid black;
+}
+
+section {
+	background: #82d2f5;
+    width: 70%;
+    margin: 40px auto;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid black;
+    text-align: center;
+}
+
+#flightnum {
+	width: 100px;
+	height: 20px;
+	font-size: 14px;
+}
+
+ol {
+	text-align: left;
+	width: 20%;
+	margin: 0 auto;
 }

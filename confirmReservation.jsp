@@ -98,6 +98,7 @@
 			st.setString(1,username);
 			st.setString(2,dReserveFlightNumber);
 			st.setString(3,dReserveAirline);
+			st.executeUpdate();
 			onWait = true;
 		}
 	}
@@ -171,6 +172,7 @@
 			st.setString(1,username);
 			st.setString(2,rReserveFlightNumber);
 			st.setString(3,rReserveAirline);
+			st.executeUpdate();
 			onWait = true;
 		}
 	}

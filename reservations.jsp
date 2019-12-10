@@ -18,10 +18,11 @@
 		</style>
 	</head>
 	<body>
-	<%	String url="jdbc:mysql://trs2019.cusoi1lz87e1.us-east-2.rds.amazonaws.com/TravelReservationSystem?useUnicode=yes&characterEncoding=UTF-8";
-	Class.forName("com.mysql.jdbc.Driver");
-	Connection con=DriverManager.getConnection(url, "admin", "prinfo$9.99");
-	%>
+		<%	
+		String url="jdbc:mysql://trs2019.cusoi1lz87e1.us-east-2.rds.amazonaws.com/TravelReservationSystem?useUnicode=yes&characterEncoding=UTF-8";
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection con=DriverManager.getConnection(url, "admin", "prinfo$9.99");
+		%>
 		<div>
 			<font color = "white" size = 6>
 				<%
@@ -48,6 +49,15 @@
 				</font>
 			</p>
 		</div>
+		<%
+		if((Boolean) session.getAttribute("rep")) {
+		%>
+			<form action="switchUser.jsp" method="post" class="rep">
+				<label style="font-size: 24px" for="user">Switch user</label>
+				<input id="user" name="user" placeholder="Username" required/>
+				<button>Switch</button>
+			</form>
+		<%}%>
 		<div>
 			<p align = "left">
 				<font color = "white" size = 5>
@@ -133,8 +143,11 @@
 				}
 				%>
 		</div>
-		<%if((String) session.getAttribute("error") != "") {%>
-			<div id="error"><%=session.getAttribute("error")%></div>
+		<%
+		String error = (String) session.getAttribute("error");
+		if(error != "null") {
+		%>
+			<div id="error"><%=error%></div>
 		<%}
 		if((Boolean) session.getAttribute("rep")) {%>
 			<form action="modifyTicket.jsp" method="post" class="rep">
@@ -289,21 +302,16 @@
 				%>
 			</table>
 			<%
-				}else{
+			} else {
 			%>
 			<p align = "center">
 				<font color = "white" size = 5>
 					No Past Reservations
 				</font>
 			</p>
-			<%	}
-				if((Boolean) session.getAttribute("rep")) {%>
-				<form action="switchUser.jsp" method="post" class="rep">
-					<label style="font-size: 24px" for="user">Switch user</label>
-					<input id="user" name="user" placeholder="Username" required/>
-					<button>Switch</button>
-				</form>
-			<%}%>
+			<%
+			}
+			%>
 		</div>
 	</body>
 </html>
