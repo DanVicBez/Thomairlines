@@ -145,7 +145,7 @@
 		</div>
 		<%
 		String error = (String) session.getAttribute("error");
-		if(error != "null") {
+		if(error != null && !"null".equals(error)) {
 		%>
 			<div id="error"><%=error%></div>
 		<%}
@@ -244,7 +244,6 @@
 				<% 
 				}
 			%>
-		</div>
 		<div>
 			<p align = "left">
 				<font color = "white" size = 5>

@@ -76,10 +76,10 @@ input:not([type='checkbox']):not([type='radio']) {
 button {
 	width: 200px;
 	height: 40px;
-	font-size: 16px;
+	font-size: 18px;
 }
 
-form > input {
+form input {
 	margin-bottom: 20px;
 }
 
@@ -158,7 +158,7 @@ section {
     text-align: center;
 }
 
-#flightnum {
+#designation, #new-designation, #flightnum {
 	width: 100px;
 	height: 20px;
 	font-size: 14px;
