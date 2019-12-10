@@ -26,8 +26,9 @@
 			<font color = "white" size = 6>
 				<%
 				String username = (String) session.getAttribute("user");
+				String lookingAtUser = (String) session.getAttribute("lookingAtUser");
 				
-				if((Boolean) session.getAttribute("rep") && session.getAttribute("lookingAtUser") != null) {
+				if((Boolean) session.getAttribute("rep") && lookingAtUser != null && !lookingAtUser.equals(username)) {
 					username = (String) session.getAttribute("lookingAtUser");
 				%>
 					<%=username%>'s Reservations
@@ -106,11 +107,11 @@
 						<%
 						if(rs2.getString("ticket_type").equals("Economy")){
 						%>
-						<td id = col13><button value=<%=rs2.getInt("ticket_num") + "," + rs2.getInt("flight_num") + "," + rs2.getString("airline_id")%> name=button<%=count%> onClick="document.getElementById('flightInfo').value = this.value"> Pay $40 and Cancel </button></td>
+						<td id = col13><button value=<%=rs2.getInt("ticket_num") + "," + rs2.getInt("flight_num") + "," + rs2.getString("airline_id")%> name=button<%=count%> onClick="document.getElementById('flightInfo').value = this.value">Pay $40 and Cancel</button></td>
 						<%
 							}else{
 						%>
-						<td id = col13><button value=<%=rs2.getInt("ticket_num") + "," + rs2.getInt("flight_num") + "," + rs2.getString("airline_id")%> name=button<%=count%> onClick="document.getElementById('flightInfo').value = this.value"> Cancel </button></td>
+						<td id = col13><button value=<%=rs2.getInt("ticket_num") + "," + rs2.getInt("flight_num") + "," + rs2.getString("airline_id")%> name=button<%=count%> onClick="document.getElementById('flightInfo').value = this.value">Cancel</button></td>
 						<%
 							}
 						%>
@@ -132,6 +133,44 @@
 				}
 				%>
 		</div>
+		<%if((String) session.getAttribute("error") != "") {%>
+			<div id="error"><%=session.getAttribute("error")%></div>
+		<%}
+		if((Boolean) session.getAttribute("rep")) {%>
+			<form action="modifyTicket.jsp" method="post" class="rep">
+				<label for="ticketnum">Modify ticket</label>
+				<select id="ticketnum" name="ticketnum" required>
+					<%
+					PreparedStatement ps = con.prepareStatement("SELECT * FROM Reserves NATURAL JOIN AssociatedWith NATURAL JOIN Ticket WHERE d_date > (SELECT CURDATE()) && username = ?;");
+					ps.setString(1, username);
+					ResultSet rs = ps.executeQuery();
+					while(rs.next()){
+						int count = 0;
+					%>
+						<option value="<%=rs.getInt("ticket_num")%>"><%=rs.getInt("ticket_num")%></option>
+					<%}%>
+				</select>
+				<br>
+				<select style="height: 25px" id ="meal" name="meal">
+					<option value="" selected>Don't change meal</option>
+					<option>Steak</option>
+					<option>Chicken</option>
+					<option>Curry</option>
+					<option>Lobster</option>
+					<option>Salad(Contains Eggs)</option>
+					<option>Kosher</option>
+					<option>Veggie</option>
+					<option>Halal</option>
+				</select>
+				<select style="height: 25px" id="class" name="class">
+					<option value="" selected>Don't change class</option>
+					<option value="economy">Economy</option>
+					<option value="business">Business (+$150)</option>
+					<option value="first">First (+$300)</option>
+				</select>
+				<button>Modify</button>
+			</form>
+		<%}%>
 		<div>
 				<p align = "left">
 					<font color = "white" size = 5>
@@ -259,7 +298,7 @@
 			</p>
 			<%	}
 				if((Boolean) session.getAttribute("rep")) {%>
-				<form action="switchUser.jsp" method="post" id="switchUser">
+				<form action="switchUser.jsp" method="post" class="rep">
 					<label style="font-size: 24px" for="user">Switch user</label>
 					<input id="user" name="user" placeholder="Username" required/>
 					<button>Switch</button>

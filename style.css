@@ -49,6 +49,7 @@ a:hover {
 #error {
 	color: red;
 	margin-bottom: 20px;
+	font-size: 24px;
 }
 
 #space { /* temporary */
@@ -133,16 +134,7 @@ table, th, td {
 	font-size: 14px;
 }
 
-#reserve {
-    background: rgba(255,255,255,.6);
-    width: 20%;
-    margin: 10px auto;
-    padding: 10px;
-    border-radius: 10px;
-    border: 2px solid black;
-}
-
-#switchUser {
+.rep {
 	background: rgba(255,255,255,.6);
     width: 20%;
     margin: 50px auto;

@@ -5,10 +5,15 @@
 	Connection con=DriverManager.getConnection(url, "admin", "prinfo$9.99");
 %>
 <%
+	String username = (String) session.getAttribute("user");
+	if((Boolean) session.getAttribute("rep") && session.getAttribute("lookingAtUser") != null) {
+		username = (String) session.getAttribute("lookingAtUser");
+	}
+
 	String flightInfo = request.getParameter("flightInfo");
 	String[] info = flightInfo.split(",");
 	PreparedStatement pss = con.prepareStatement("SELECT * FROM Reserves NATURAL JOIN AssociatedWith NATURAL JOIN Ticket WHERE username = ? && ticket_num = ? && flight_num = ? && airline_id = ?;");
-	pss.setString(1, (String)session.getAttribute("user"));
+	pss.setString(1, username);
 	pss.setInt(2, Integer.valueOf(info[0]));
 	pss.setInt(3, Integer.valueOf(info[1]));
 	pss.setString(4, info[2]);
@@ -33,7 +38,7 @@
 		pss.executeUpdate();
 	}
 	pss = con.prepareStatement("SELECT COUNT(*) AS c FROM Ticket NATURAL JOIN AssociatedWith NATURAL JOIN Reserves WHERE username = ? && d_date = ? && flight_num = ? && airline_id = ?;");
-	pss.setString(1, (String)session.getAttribute("user"));
+	pss.setString(1, username);
 	pss.setString(2, dDate);
 	pss.setInt(3, Integer.valueOf(info[1]));
 	pss.setString(4, info[2]);
@@ -43,15 +48,15 @@
 		pss = con.prepareStatement("DELETE FROM AssociatedWith WHERE ticket_num = ? && flight_num = ?;");
 		pss.setInt(1, Integer.valueOf(info[0]));
 		pss.setInt(2, Integer.valueOf(info[1]));
-		rss = pss.executeQuery();
+		pss.executeUpdate();
 		pss = con.prepareStatement("DELETE FROM Ticket WHERE ticket_num = ? && username = ?;");
 		pss.setInt(1, Integer.valueOf(info[0]));
-		pss.setString(2, (String)session.getAttribute("user"));
+		pss.setString(2, username);
 		pss.executeUpdate();
 		
 	}else{
 		pss = con.prepareStatement("DELETE FROM Reserves WHERE username = ? && flight_num = ?;");
-		pss.setString(1, (String)session.getAttribute("user"));
+		pss.setString(1, username);
 		pss.setInt(2, Integer.valueOf(info[1]));
 		pss.executeUpdate();
 		pss = con.prepareStatement("DELETE FROM AssociatedWith WHERE ticket_num = ? && flight_num = ?;");
@@ -60,7 +65,7 @@
 		pss.executeUpdate();
 		pss = con.prepareStatement("DELETE FROM Ticket WHERE ticket_num = ? && username = ?;");
 		pss.setInt(1, Integer.valueOf(info[0]));
-		pss.setString(2, (String)session.getAttribute("user"));
+		pss.setString(2, username);
 		pss.executeUpdate();
 	}
 	response.sendRedirect("reservations.jsp");

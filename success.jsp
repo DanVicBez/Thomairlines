@@ -105,7 +105,7 @@
 								// TODO: ban people from selecting later departure than arrival dates
 							%>
 							<td id="searchtd">
-								<input type="date" name="fromDate" id="ddateinput" value=<%=dtf.format(now)%> min=<%=dtf.format(now)%>></input>
+								<input type="date" name="fromDate" id="ddateinput" onchange="document.getElementById('adateinput').min = this.value;" value=<%=dtf.format(now)%> min=<%=dtf.format(now)%>></input>
 							</td>
 							<td id="searchtd">
 								<input type="date" name="toDate" id="adateinput" value=<%=dtf.format(now)%> min=<%=dtf.format(now)%>></input>
@@ -250,7 +250,7 @@
 					}
 					if (one || two) {
 					%>
-						<div id="reserve">
+						<div class="rep">
 							<button>Reserve Flight(s)</button>
 							<%if((Boolean) session.getAttribute("rep")) {%>
 								<p>Reserve flights for:</p>

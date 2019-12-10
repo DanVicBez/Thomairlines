@@ -20,6 +20,13 @@
 			<img alt="Thomairlines" src="https://i.imgur.com/NfZWVqI.jpg" width=55px style="display: inline"/>
 			<h1>Thomairlines</h1>
 		</div>
+		<div>
+			<p align = "left">
+				<font color = "white" size = 4>
+					<a href = 'success.jsp'>Back to Flight Search</a>
+				</font>
+			</p>
+		</div>
 		<h2>Customer Representative Dashboard</h2>
 	</body>
 </html>

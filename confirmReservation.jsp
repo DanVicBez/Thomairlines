@@ -9,20 +9,11 @@
 	if(reserveFor.equals("null") || reserveFor.equals("self")) {
 		username = (String) session.getAttribute("user");
 	}
-	
-// 	System.out.printf("reserving for user '%s'\n", username);
 
 	String url = "jdbc:mysql://trs2019.cusoi1lz87e1.us-east-2.rds.amazonaws.com/TravelReservationSystem";
 	Class.forName("com.mysql.jdbc.Driver");
 	Connection con = DriverManager.getConnection(url, "admin", "prinfo$9.99");
-// 	String group1 = "";
-// 	String group2 = "";
-// 	if (request.getParameter("group1") != null) {
-// 		group1 = request.getParameter("group1").replace("/","");
-// 	}
-// 	if (request.getParameter("group2") != null) {
-// 		group2 = request.getParameter("group2").replace("/","");
-// 	}
+
 	String group1 = request.getParameter("group1");
 	String group2 = request.getParameter("group2");
 
@@ -127,8 +118,7 @@
 		st2.setString(2,rReserveAirline);
 		ResultSet temp = st2.executeQuery();
 		temp.next();
-		String result = temp.getString(1);
-		int seatsAvailable = Integer.parseInt(result);
+		int seatsAvailable = temp.getInt(1);
 		
 		if (seatsAvailable > 0) {
 			PreparedStatement st3 = con.prepareStatement(String.format("UPDATE Seat SET %s_class = %s_class + 1 WHERE flight_num = ? AND airline_id = ?", flightClass, flightClass));
