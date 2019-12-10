@@ -19,14 +19,14 @@
 		rs = ps.executeQuery();
 		
 		if(rs.next()) {
-			session.setAttribute("response", "Error creating aircraft: already exists");
+			session.setAttribute("aircraft-response", "Error creating aircraft: already exists");
 		} else {
 			ps = con.prepareStatement("INSERT INTO Aircraft VALUES (?, ?)");
 			ps.setString(1, designation);
 			ps.setString(2, airlineId);
 			System.out.printf("Updated %d rows\n", ps.executeUpdate());
 			
-			session.setAttribute("response", "Aircraft successfully created");
+			session.setAttribute("aircraft-response", "Aircraft successfully created");
 		}
 	} else if(choice.equals("delete")) {
 		ps = con.prepareStatement("SELECT * FROM Aircraft WHERE designation = ? AND airline_id = ?");
@@ -40,9 +40,9 @@
 			ps.setString(2, airlineId);
 			System.out.printf("Updated %d rows\n", ps.executeUpdate());
 			
-			session.setAttribute("response", "Aircraft successfully deleted");
+			session.setAttribute("aircraft-response", "Aircraft successfully deleted");
 		} else {
-			session.setAttribute("response", "Error deleting aircraft: doesn't exist");
+			session.setAttribute("aircraft-response", "Error deleting aircraft: doesn't exist");
 		}
 	} else if(choice.equals("edit")) {
 		ps = con.prepareStatement("SELECT * FROM Aircraft WHERE designation = ? AND airline_id = ?");
@@ -61,9 +61,9 @@
 			ps.setString(4, airlineId);
 			System.out.printf("Updated %d rows\n", ps.executeUpdate());
 			
-			session.setAttribute("response", "Aircraft successfully edited");
+			session.setAttribute("aircraft-response", "Aircraft successfully edited");
 		} else {
-			session.setAttribute("response", "Error editing aircraft: doesn't exist");
+			session.setAttribute("aircraft-response", "Error editing aircraft: doesn't exist");
 		}
 	}
 	

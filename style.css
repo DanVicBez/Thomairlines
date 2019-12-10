@@ -158,10 +158,10 @@ section {
     text-align: center;
 }
 
-#designation, #new-designation, #flightnum {
-	width: 100px;
-	height: 20px;
-	font-size: 14px;
+section input {
+	width: 100px !important;
+	height: 20px !important;
+	font-size: 14px !important;
 }
 
 ol {

@@ -83,13 +83,13 @@
 		<section>
 			<h3>Aircraft Manager</h3>
 			<%
-			String responseMsg = (String) session.getAttribute("response");
+			String responseMsg = (String) session.getAttribute("aircraft-response");
 			if(responseMsg != null && !"null".equals(responseMsg)) {%>
 				<div style="margin-bottom: 20px; font-weight: bold"><%=responseMsg%></div>
 			<%
 			}
 			
-			session.setAttribute("response", "null");
+			session.setAttribute("aircraft-response", "null");
 			%>
 			<form method="post" action="getAircraft.jsp">
 				<label for="designation">Model:</label>
@@ -107,14 +107,14 @@
 					<%}%>
 				</select>
 				<br><br>
-				<label for="choice">What would you like to do?</label>
-				<select id="choice" name="choice" onchange="aircraftEdit()">
+				<label for="aircraft-choice">What would you like to do?</label>
+				<select id="aircraft-choice" name="choice" onchange="aircraftEdit()">
 					<option value="create">Create this aircraft</option>
 					<option value="delete">Delete this aircraft</option>
 					<option value="edit">Edit this aircraft</option>
 				</select>
 				<br><br>
-				<div id="edit" style="display:none">
+				<div id="aircraft-edit" style="display:none">
 					<label for="new-designation">New Model:</label>
 					<input id="new-designation" name="new-designation" placeholder="New Model" minlength="1" maxlength="4" />
 					<br>
@@ -136,16 +136,64 @@
 		</section>
 		<section>
 			<h3>Airport Manager</h3>
+			<%
+			responseMsg = (String) session.getAttribute("airport-response");
+			if(responseMsg != null && !"null".equals(responseMsg)) {%>
+				<div style="margin-bottom: 20px; font-weight: bold"><%=responseMsg%></div>
+			<%
+			}
 			
+			session.setAttribute("airport-response", "null");
+			%>
+			<form method="post" action="getAirport.jsp">
+				<label for="name">Name:</label>
+				<input id="name" name="name" placeholder="Name" maxlength="40" required />
+				<br>
+				<label for="airportid">ID:</label>
+				<input id="airportid" name="airportid" placeholder="ID" maxlength="3" required>
+				<br>
+				<label for="country">Country:</label>
+				<input id="country" name="country" placeholder="Country" maxlength="40" required>
+				<br><br>
+				<label for="airport-choice">What would you like to do?</label>
+				<select id="airport-choice" name="choice" onchange="airportEdit()">
+					<option value="create">Create this airport</option>
+					<option value="delete">Delete this airport</option>
+					<option value="edit">Edit this airport</option>
+				</select>
+				<br><br>
+				<div id="airport-edit" style="display:none">
+					Leave a field blank to leave it unchanged.
+					<br><br>
+					<label for="new-name">New Name:</label>
+					<input id="new-name" name="new-name" placeholder="New Name" maxlength="40" />
+					<br>
+					<label for="new-airportid">New ID:</label>
+					<input id="new-airportid" name="new-airportid" placeholder="New ID" maxlength="3">
+					<br>
+					<label for="new-country">New Country:</label>
+					<input id="new-country" name="new-country" placeholder="Country" maxlength="40">
+				</div>
+				<br><br>
+				<button>Submit</button>
+			</form>
 		</section>
 		<script>
 			function aircraftEdit() {
-				if(document.getElementById('choice').value === 'edit') {
-					document.getElementById('edit').style.display = 'block';
+				if(document.getElementById('aircraft-choice').value === 'edit') {
+					document.getElementById('aircraft-edit').style.display = 'block';
 					document.getElementById('new-designation').required = true;
 				} else {
-					document.getElementById('edit').style.display = 'none';
+					document.getElementById('aircraft-edit').style.display = 'none';
 					document.getElementById('new-designation').required = false;
+				}
+			}
+			
+			function airportEdit() {
+				if(document.getElementById('airport-choice').value === 'edit') {
+					document.getElementById('airport-edit').style.display = 'block';
+				} else {
+					document.getElementById('airport-edit').style.display = 'none';
 				}
 			}
 		</script>
