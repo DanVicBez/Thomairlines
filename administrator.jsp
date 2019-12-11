@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page import="java.sql.*" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -16,6 +16,11 @@
 		</style>
 	</head>
 	<body>
+		<%
+		String url = "jdbc:mysql://trs2019.cusoi1lz87e1.us-east-2.rds.amazonaws.com/TravelReservationSystem?useUnicode=yes&characterEncoding=UTF-8";
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection con = DriverManager.getConnection(url, "admin", "prinfo$9.99");
+		%>
 		<div id="banner">
 			<img alt="Thomairlines" src="https://i.imgur.com/NfZWVqI.jpg" width=55px style="display: inline"/>
 			<h1>Thomairlines</h1>
@@ -44,7 +49,7 @@
 			%>
 			<form method="post" action="editUser.jsp">
 				<label for="username">Username:</label>
-				<input id="username" name="username" placeholder="Username" required />
+				<input id="username" name="username" placeholder="Username" disabled required />
 				<br><br>
 				<label for="choice">What would you like to do?</label>
 				<select id="choice" name="choice" onchange="userEdit()">
@@ -60,7 +65,7 @@
 					<input id="new-username" name="new-username" placeholder="New Username" maxlength="20" />
 					<br>
 					<label for="new-password">New Password:</label>
-					<input id="new-password" name="new-password" placeholder="New Password" maxlength="20"/>
+					<input type="password" id="new-password" name="new-password" placeholder="New Password" maxlength="20"/>
 					<br>
 					<label for="new-first">New First Name:</label>
 					<input id="new-first" name="new-first" placeholder="New First Name" maxlength="20"/>
@@ -80,6 +85,39 @@
 		</section>
 		<section>
 			<h3>Sales Reports</h3>
+			<%
+			String month = request.getParameter("month");
+			if(month != null) {
+				PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) AS num, SUM(total_fare) AS total FROM Ticket WHERE MONTH(purchase_time) = ?");
+				ps.setString(1, month);
+				ResultSet rs = ps.executeQuery();
+				
+				if(rs.next()) {
+			%>
+					There were <%=rs.getString("num")%> tickets sold that month, total revenue: $<%=rs.getInt("total")%>
+					<br>
+			<%
+				}
+			}
+			%>
+			<form method = "post" action = 'administrator.jsp'>
+				<label for="Month">Select a Month</label>
+				<select id= "month" name = "month" style = "height: 40px; width: 100px">
+					<option value="1">January</option>
+					<option value="2">February</option>
+					<option value="3">March</option>
+					<option value="4">April</option>
+					<option value="5">May</option>
+					<option value="6">June</option>
+					<option value="7">July</option>
+					<option value="8">August</option>
+					<option value="9">September</option>
+					<option value="10">October</option>
+					<option value="11">November</option>
+					<option value="12">December</option>
+				</select>
+				<button>Go!</button>
+			</form>
 		</section>
 		<section>
 			<h3>Search for Reservations</h3>
@@ -102,6 +140,8 @@
 				} else {
 					document.getElementById('user-edit').style.display = 'none';
 				}
+				
+				document.getElementById('username').disabled = (choice === 'create');
 			}
 		</script>
 	</body>
