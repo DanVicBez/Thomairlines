@@ -53,14 +53,22 @@
 			String newAirportId = request.getParameter("new-airportid");
 			String newCountry = request.getParameter("new-country");
 			
-			ps = con.prepareStatement("UPDATE Airport SET airport_name = ?, airport_id = ?, country = ? WHERE airport_id = ?");
-			ps.setString(1, newName.isEmpty() ? name : newName);
-			ps.setString(2, newAirportId.isEmpty() ? airportId : newAirportId);
-			ps.setString(3, newCountry.isEmpty() ? country : newCountry);
-			ps.setString(4, airportId);
-			System.out.printf("Updated %d rows\n", ps.executeUpdate());
-			
-			session.setAttribute("airport-response", "Airport successfully edited");
+			ps = con.prepareStatement("SELECT * FROM Airport WHERE airport_id = ?");
+			ps.setString(1, newAirportId);
+			rs = ps.executeQuery();
+
+			if(rs.next()) {
+				session.setAttribute("airport-response", "Error editing airport: New airport already exists");
+			} else {
+				ps = con.prepareStatement("UPDATE Airport SET airport_name = ?, airport_id = ?, country = ? WHERE airport_id = ?");
+				ps.setString(1, newName.isEmpty() ? name : newName);
+				ps.setString(2, newAirportId.isEmpty() ? airportId : newAirportId);
+				ps.setString(3, newCountry.isEmpty() ? country : newCountry);
+				ps.setString(4, airportId);
+				System.out.printf("Updated %d rows\n", ps.executeUpdate());
+				
+				session.setAttribute("airport-response", "Airport successfully edited");
+			}
 		} else {
 			session.setAttribute("airport-response", "Error editing airport: doesn't exist");
 		}

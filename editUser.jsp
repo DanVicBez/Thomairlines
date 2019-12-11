@@ -73,44 +73,52 @@
 			String newLast = request.getParameter("new-last");
 			String newType = request.getParameter("new-type");
 			
-			ps = con.prepareStatement("UPDATE Account SET username = ?, acc_password = ?, first_name = ?, last_name = ? WHERE username = ?");
-			ps.setString(1, newUsername.isEmpty() ? username : newUsername);
-			ps.setString(2, newPassword.isEmpty() ? password : newPassword);
-			ps.setString(3, newFirst.isEmpty() ? first : newFirst);
-			ps.setString(4, newLast.isEmpty() ? last : newLast);
-			ps.setString(5, username);
-			
-			System.out.printf("%d rows updated\n", ps.executeUpdate());
-			session.setAttribute("user-response", "User edited successfully");
-			
-			newUsername = newUsername.isEmpty() ? username : newUsername;
-			
-			ps = con.prepareStatement("SELECT * FROM Customer WHERE username = ?");
+			ps = con.prepareStatement("SELECT * FROM Account WHERE username = ?");
 			ps.setString(1, newUsername);
 			rs = ps.executeQuery();
 			
-			if(rs.next() && newType.equals("rep")) {
-				ps = con.prepareStatement("DELETE FROM Customer WHERE username = ?");
-				ps.setString(1, newUsername);
-				System.out.printf("%d rows updated\n", ps.executeUpdate());
+			if(rs.next()) {
+				session.setAttribute("user-response", "Error editing user: new username already taken");
+			} else {
+				ps = con.prepareStatement("UPDATE Account SET username = ?, acc_password = ?, first_name = ?, last_name = ? WHERE username = ?");
+				ps.setString(1, newUsername.isEmpty() ? username : newUsername);
+				ps.setString(2, newPassword.isEmpty() ? password : newPassword);
+				ps.setString(3, newFirst.isEmpty() ? first : newFirst);
+				ps.setString(4, newLast.isEmpty() ? last : newLast);
+				ps.setString(5, username);
 				
-				ps = con.prepareStatement("INSERT INTO CustomerRep VALUES (?)");
-				ps.setString(1, newUsername);
 				System.out.printf("%d rows updated\n", ps.executeUpdate());
-			}
-			
-			ps = con.prepareStatement("SELECT * FROM CustomerRep WHERE username = ?");
-			ps.setString(1, newUsername);
-			rs = ps.executeQuery();
-			
-			if(rs.next() && newType.equals("customer")) {
-				ps = con.prepareStatement("DELETE FROM CustomerRep WHERE username = ?");
-				ps.setString(1, newUsername);
-				System.out.printf("%d rows updated\n", ps.executeUpdate());
+				session.setAttribute("user-response", "User edited successfully");
 				
-				ps = con.prepareStatement("INSERT INTO Customer VALUES (?)");
+				newUsername = newUsername.isEmpty() ? username : newUsername;
+				
+				ps = con.prepareStatement("SELECT * FROM Customer WHERE username = ?");
 				ps.setString(1, newUsername);
-				System.out.printf("%d rows updated\n", ps.executeUpdate());
+				rs = ps.executeQuery();
+				
+				if(rs.next() && newType.equals("rep")) {
+					ps = con.prepareStatement("DELETE FROM Customer WHERE username = ?");
+					ps.setString(1, newUsername);
+					System.out.printf("%d rows updated\n", ps.executeUpdate());
+					
+					ps = con.prepareStatement("INSERT INTO CustomerRep VALUES (?)");
+					ps.setString(1, newUsername);
+					System.out.printf("%d rows updated\n", ps.executeUpdate());
+				}
+				
+				ps = con.prepareStatement("SELECT * FROM CustomerRep WHERE username = ?");
+				ps.setString(1, newUsername);
+				rs = ps.executeQuery();
+				
+				if(rs.next() && newType.equals("customer")) {
+					ps = con.prepareStatement("DELETE FROM CustomerRep WHERE username = ?");
+					ps.setString(1, newUsername);
+					System.out.printf("%d rows updated\n", ps.executeUpdate());
+					
+					ps = con.prepareStatement("INSERT INTO Customer VALUES (?)");
+					ps.setString(1, newUsername);
+					System.out.printf("%d rows updated\n", ps.executeUpdate());
+				}
 			}
 		} else {
 			session.setAttribute("user-response", "Error editing user: doesn't exist");

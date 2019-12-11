@@ -54,14 +54,23 @@
 			String newDesignation = request.getParameter("new-designation");
 			String newAirlineId = request.getParameter("new-airlineid");
 			
-			ps = con.prepareStatement("UPDATE Aircraft SET designation = ?, airline_id = ? WHERE designation = ? and airline_id = ?");
+			ps = con.prepareStatement("SELECT * FROM Aircraft WHERE designation = ? AND airline_id = ?");
 			ps.setString(1, newDesignation);
 			ps.setString(2, newAirlineId);
-			ps.setString(3, designation);
-			ps.setString(4, airlineId);
-			System.out.printf("Updated %d rows\n", ps.executeUpdate());
+			rs = ps.executeQuery();
 			
-			session.setAttribute("aircraft-response", "Aircraft successfully edited");
+			if(rs.next()) {
+				session.setAttribute("aircraft-response", "Error editing aircraft: new aircraft already exists");
+			} else {
+				ps = con.prepareStatement("UPDATE Aircraft SET designation = ?, airline_id = ? WHERE designation = ? and airline_id = ?");
+				ps.setString(1, newDesignation);
+				ps.setString(2, newAirlineId);
+				ps.setString(3, designation);
+				ps.setString(4, airlineId);
+				System.out.printf("Updated %d rows\n", ps.executeUpdate());
+				
+				session.setAttribute("aircraft-response", "Aircraft successfully edited");	
+			}
 		} else {
 			session.setAttribute("aircraft-response", "Error editing aircraft: doesn't exist");
 		}
