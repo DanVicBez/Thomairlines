@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ page import="java.sql.*" %>
+<%@ page import="java.text.DateFormatSymbols" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -39,8 +40,8 @@
 			String responseMsg = (String) session.getAttribute("user-response");
 			if(responseMsg != null && !"null".equals(responseMsg)) {
 				if (responseMsg.startsWith("Error")) {%>
-					<div style="margin-bottom: 20px; font-weight: bold; color: red"><%=responseMsg%></div> <%
-				} else {%>
+					<div style="margin-bottom: 20px; font-weight: bold; color: red"><%=responseMsg%></div>
+				<%} else {%>
 				<div style="margin-bottom: 20px; font-weight: bold; color: green"><%=responseMsg%></div>
 			<%}
 			}
@@ -87,22 +88,30 @@
 			<h3>Sales Reports</h3>
 			<%
 			String month = request.getParameter("month");
-			if(month != null) {
-				PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) AS num, SUM(total_fare) AS total FROM Ticket WHERE MONTH(purchase_time) = ?");
+			String year = request.getParameter("year");
+			if(month != null && year != null) {
+				PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) AS num, SUM(total_fare) AS total FROM Ticket WHERE MONTH(purchase_time) = ? AND YEAR(purchase_time) = ?");
 				ps.setString(1, month);
+				ps.setString(2, year);
 				ResultSet rs = ps.executeQuery();
 				
 				if(rs.next()) {
 			%>
-					There were <%=rs.getString("num")%> tickets sold that month, total revenue: $<%=rs.getInt("total")%>
+					<div style="margin-bottom: 20px; font-weight: bold">
+						Sales for <%=new DateFormatSymbols().getMonths()[Integer.parseInt(month) - 1]%> <%=year%>:
+						<br>
+						Tickets sold: <%=rs.getString("num")%>
+						<br>
+						Total revenue: $<%=rs.getInt("total")%>
+					</div>
 					<br>
 			<%
 				}
 			}
 			%>
 			<form method = "post" action = 'administrator.jsp'>
-				<label for="Month">Select a Month</label>
-				<select id= "month" name = "month" style = "height: 40px; width: 100px">
+				<label for="month">Month:</label>
+				<select id= "month" name = "month" style = "margin-bottom: 10px">
 					<option value="1">January</option>
 					<option value="2">February</option>
 					<option value="3">March</option>
@@ -116,6 +125,10 @@
 					<option value="11">November</option>
 					<option value="12">December</option>
 				</select>
+				<br>
+				<label for="year">Year:</label>
+				<input id="year" name="year" type="number" value="2019" min="2019" required />
+				<br>
 				<button>Go!</button>
 			</form>
 		</section>
