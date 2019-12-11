@@ -169,3 +169,8 @@ ol {
 	width: 20%;
 	margin: 0 auto;
 }
+
+hr {
+	width: 50%;
+	border: 1px solid black;
+}
