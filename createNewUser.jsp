@@ -34,6 +34,11 @@
 					st.setString(4, last);
 					st.executeUpdate();
 					
+					st = con.prepareStatement("INSERT INTO Customer " +
+							"VALUES (?)");
+					st.setString(1, username);
+					st.executeUpdate();
+					
 					session.setAttribute("user", username);
 			        response.sendRedirect("success.jsp");
 				} catch(MysqlDataTruncation e) {

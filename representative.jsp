@@ -54,8 +54,8 @@
 			</form>
 			<br>
 			<%
-			String[] usernames = (String[]) session.getAttribute("usernames");
-			if(usernames != null) {
+			if(session.getAttribute("usernames") != null && !"null".equals(session.getAttribute("usernames"))){
+				String[] usernames = (String[]) session.getAttribute("usernames");
 				if(usernames.length > 0) {
 			%>
 				Waiting list for flight <%=(String) session.getAttribute("airlineid") + (Integer) session.getAttribute("flightnum")%>:
@@ -75,6 +75,7 @@
 			<%
 				}
 			}
+			session.setAttribute("usernames", "null");
 			%>
 		</section>
 		<section>
@@ -84,9 +85,12 @@
 			<h3>Aircraft Manager</h3>
 			<%
 			String responseMsg = (String) session.getAttribute("aircraft-response");
-			if(responseMsg != null && !"null".equals(responseMsg)) {%>
-				<div style="margin-bottom: 20px; font-weight: bold"><%=responseMsg%></div>
-			<%
+			if(responseMsg != null && !"null".equals(responseMsg)) {
+				if (responseMsg.startsWith("Error")) {%>
+					<div style="margin-bottom: 20px; font-weight: bold; color: red"><%=responseMsg%></div> <%
+				} else {%>
+				<div style="margin-bottom: 20px; font-weight: bold; color: green"><%=responseMsg%></div>
+			<%}
 			}
 			
 			session.setAttribute("aircraft-response", "null");
@@ -138,9 +142,12 @@
 			<h3>Airport Manager</h3>
 			<%
 			responseMsg = (String) session.getAttribute("airport-response");
-			if(responseMsg != null && !"null".equals(responseMsg)) {%>
-				<div style="margin-bottom: 20px; font-weight: bold"><%=responseMsg%></div>
-			<%
+			if(responseMsg != null && !"null".equals(responseMsg)) {
+				if (responseMsg.startsWith("Error")) {
+					%><div style="margin-bottom: 20px; font-weight: bold; color: red"><%=responseMsg%></div> <%
+				} else {%>
+				<div style="margin-bottom: 20px; font-weight: bold; color: green"><%=responseMsg%></div>
+			<%}
 			}
 			
 			session.setAttribute("airport-response", "null");
