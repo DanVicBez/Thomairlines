@@ -80,11 +80,142 @@
 		</section>
 		<section>
 			<h3>Flight Manager</h3>
+			<%
+			String responseMsg = (String) session.getAttribute("flight-response");
+			if(responseMsg != null && !"null".equals(responseMsg)) {
+				if (responseMsg.startsWith("Error")) {%>
+					<div style="margin-bottom: 20px; font-weight: bold; color: red"><%=responseMsg%></div> <%
+				} else {%>
+				<div style="margin-bottom: 20px; font-weight: bold; color: green"><%=responseMsg%></div>
+			<%}
+			}
+			session.setAttribute("flight-response", "null");
+			%>
+			<form method = "post" action = "getFlight.jsp">
+				<div id= "flight-create" style = "display:none">
+				<label for="flightNum">Flight #:</label>
+				<input id="flightNum" name="flightNum" placeholder="Flight #"/>
+				<br>
+				<label for="airlineid2">Airline:</label>
+				<select id="airlineid2" name="airlineid2">
+					<option value = "" selected disabled>Please choose an airline</option>
+					<%
+					ps = con.prepareStatement("SELECT * FROM Airline");
+					rs = ps.executeQuery();
+					while(rs.next()) {
+						String id = rs.getString("airline_id");
+					%>
+						<option value="<%=id%>"><%=id%> (<%=rs.getString("airline_name")%>)</option>
+					<%}%>
+				</select>
+				<br><br>
+				</div>
+				<label for="flight-choice">What would you like to do?</label>
+				<select id="flight-choice" name="choice" onchange="flightEdit()">
+					<option value="create">Create this flight</option>
+					<option value="delete">Delete this flight</option>
+					<option value="edit">Edit this flight</option>
+				</select>
+				<br><br>
+				<div id="flight-edit">
+					Leave a field blank to leave it unchanged.
+					<br><br>
+					<label for="new-flightnum">New Flight #:</label>
+					<input required id="new-flightnum" name="new-flightnum" placeholder="New Flight #" type= "number" min = "2" max = "9999" />
+					<br>
+					<label for="new-airlineid2">New Airline:</label>
+					<select id="new-airlineid2" name="new-airlineid2" required>
+					<option value = "" selected disabled>Please choose an airline</option>
+						<%
+						ps = con.prepareStatement("SELECT * FROM Airline");
+						rs = ps.executeQuery();
+						while(rs.next()) {
+							String id = rs.getString("airline_id");
+						%>
+							<option value="<%=id%>"><%=id%> (<%=rs.getString("airline_name")%>)</option>
+						<%}%>
+					</select>
+					<br><br>
+					<label for="new-days">New Operating Days:</label>
+					<br><br>
+					<input type="checkbox" name="new-mon"> Monday
+					<br>
+					<input type="checkbox" name="new-tue"> Tuesday
+					<br>
+					<input type="checkbox" name="new-wed"> Wednesday
+					<br>
+					<input type="checkbox" name="new-thu"> Thursday
+					<br>
+					<input type="checkbox" name="new-fri"> Friday
+					<br>
+					<input type="checkbox" name="new-sat"> Saturday
+					<br>
+					<input type="checkbox" name="new-sun"> Sunday
+					<br>
+					<label for="new-dtime">New Departure Time:</label>
+					<input type = "time" id="new-dtime" name="new-dtime" required/>
+					<br>
+					<label for="new-atime">New Arrival Time:</label>
+					<input type = "time" id="new-atime" name="new-atime" required/>
+					<br>
+					<label for="new-dairportid">New Departing Airport:</label>
+					<select id="new-dairportid" name="new-dairportid" required>
+					<option value="" disabled selected>Please choose an airport</option>
+						<%
+						ps = con.prepareStatement("SELECT * FROM Airport");
+						rs = ps.executeQuery();
+						while(rs.next()) {
+							String id = rs.getString("airport_id");
+						%>
+							<option value="<%=id%>"><%=id%> (<%=rs.getString("airport_name")%>)</option>
+						<%}%>
+					</select>
+					<br><br>
+					<label for="new-aairportid">New Arriving Airport:</label>
+					<select id="new-aairportid" name="new-aairportid" required>
+						<option value="" disabled selected>Please choose an airport</option>
+						<%
+						ps = con.prepareStatement("SELECT * FROM Airport");
+						rs = ps.executeQuery();
+						while(rs.next()) {
+							String id = rs.getString("airport_id");
+						%>
+							<option value="<%=id%>"><%=id%> (<%=rs.getString("airport_name")%>)</option>
+							<%}%>
+					</select>
+					<br><br>
+					<label for="new-designation2">New Model:</label>
+					<select id="new-designation2" name="new-designation2" required>
+						<option value="" disabled selected>Please choose an aircraft model</option>
+						<%
+						ps = con.prepareStatement("SELECT DISTINCT designation FROM Aircraft;");
+						rs = ps.executeQuery();
+						while(rs.next()) {
+							String id = rs.getString("designation");
+						%>
+							<option value="<%=id%>"><%=id%></option>
+							<%}%>
+					</select>
+					<br><br>
+					<label for="new-price">New Price:</label>
+					<input id="new-price" name="new-price" placeholder="New Price" required/>
+					<br>
+					<label for="new-stops">New # of Stops:</label>
+					<select id="new-stops" name="new-stops" required>
+						<option value="" disabled selected>Please choose an amount of stops</option>
+						<option value="0">0</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+					</select>
+				</div>
+				<br><br>
+				<button>Submit</button>
+			</form>
 		</section>
 		<section>
 			<h3>Aircraft Manager</h3>
 			<%
-			String responseMsg = (String) session.getAttribute("aircraft-response");
+			responseMsg = (String) session.getAttribute("aircraft-response");
 			if(responseMsg != null && !"null".equals(responseMsg)) {
 				if (responseMsg.startsWith("Error")) {%>
 					<div style="margin-bottom: 20px; font-weight: bold; color: red"><%=responseMsg%></div> <%
@@ -201,6 +332,55 @@
 					document.getElementById('airport-edit').style.display = 'block';
 				} else {
 					document.getElementById('airport-edit').style.display = 'none';
+				}
+			}
+			
+			function flightEdit() {
+				var choice = document.getElementById('flight-choice').value;
+				if(choice == 'edit'){
+					document.getElementById('flight-edit').style.display = 'block';
+					document.getElementById('flight-create').style.display = 'block';
+					document.getElementById('flightNum').required = true;
+					document.getElementById('airlineid2').required = true;
+					document.getElementById('new-flightnum').required = false;
+					document.getElementById('new-airlineid2').required = false;
+					document.getElementById('new-dtime').required = false;
+					document.getElementById('new-atime').required = false;
+					document.getElementById('new-dairportid').required = false;
+					document.getElementById('new-aairportid').required = false;
+					document.getElementById('new-designation2').required = false;
+					document.getElementById('new-price').required = false;
+					document.getElementById('new-stops').required = false;
+
+				}else if(choice == 'delete'){
+					document.getElementById('flight-edit').style.display = 'none';
+					document.getElementById('flight-create').style.display = 'block';
+					document.getElementById('flightNum').required = true;
+					document.getElementById('airlineid2').required = true;
+					document.getElementById('new-flightnum').required = false;
+					document.getElementById('new-airlineid2').required = false;
+					document.getElementById('new-dtime').required = false;
+					document.getElementById('new-atime').required = false;
+					document.getElementById('new-dairportid').required = false;
+					document.getElementById('new-aairportid').required = false;
+					document.getElementById('new-designation2').required = false;
+					document.getElementById('new-price').required = false;
+					document.getElementById('new-stops').required = false;
+
+				}else{
+					document.getElementById('flightNum').required = false;
+					document.getElementById('airlineid2').required = false;
+					document.getElementById('flight-create').style.display = 'none';
+					document.getElementById('flight-edit').style.display = 'block';
+					document.getElementById('new-flightnum').required = true;
+					document.getElementById('new-airlineid2').required = true;
+					document.getElementById('new-dtime').required = true;
+					document.getElementById('new-atime').required = true;
+					document.getElementById('new-dairportid').required = true;
+					document.getElementById('new-aairportid').required = true;
+					document.getElementById('new-designation2').required = true;
+					document.getElementById('new-price').required = true;
+					document.getElementById('new-stops').required = true;
 				}
 			}
 		</script>
