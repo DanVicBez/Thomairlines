@@ -193,7 +193,7 @@
 						ps.setString(1, flightNum);
 						ps.setString(2, flightAirline);
 					} else {
-						ps = con.prepareStatement("SELECT * AS c FROM Reserves NATURAL JOIN Flight NATURAL JOIN Ticket NATURAL JOIN AssociatedWith WHERE d_date > (SELECT CURDATE()) AND username = ?;");
+						ps = con.prepareStatement("SELECT * FROM Reserves NATURAL JOIN Flight NATURAL JOIN Ticket NATURAL JOIN AssociatedWith WHERE d_date > (SELECT CURDATE()) AND username = ?;");
 						ps.setString(1, username);
 					}
 
