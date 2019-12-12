@@ -158,7 +158,7 @@ section {
     text-align: center;
 }
 
-section input {
+section input:not([type='radio']) {
 	width: 100px !important;
 	height: 20px !important;
 	font-size: 14px !important;
