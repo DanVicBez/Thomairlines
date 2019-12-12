@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ page import ="java.sql.*"%>
 <!DOCTYPE html>
 <html>
@@ -28,18 +27,20 @@
 				<%
 				String username = (String) session.getAttribute("user");
 				String lookingAtUser = (String) session.getAttribute("lookingAtUser");
+				String flightNum = (String) session.getAttribute("lookingAtFlightNum");
+				String flightAirline = (String) session.getAttribute("lookingAtFlightAirline");
+				boolean rep = (Boolean) session.getAttribute("rep");
+				boolean admin = (Boolean) session.getAttribute("admin");
 				
-				if((Boolean) session.getAttribute("rep") && lookingAtUser != null && !lookingAtUser.equals(username)) {
+				if((rep || admin) && lookingAtUser != null && !lookingAtUser.equals("null") && !lookingAtUser.equals(username)) {
 					username = (String) session.getAttribute("lookingAtUser");
 				%>
 					<%=username%>'s Reservations
-				<%
-				} else {
-				%>
+				<%} else if(admin && flightNum != null && flightAirline != null && !flightNum.equals("null") && !flightAirline.equals("null")) {%>
+					Reservations for Flight <%=flightAirline + flightNum%> 
+				<%} else {%>
 					My Reservations
-				<%
-				}
-				%>
+				<%}%>
 			</font>
 		</div>
 		<div>
@@ -49,9 +50,33 @@
 				</font>
 			</p>
 		</div>
-		<%
-		if((Boolean) session.getAttribute("rep")) {
-		%>
+		<%if((Boolean) session.getAttribute("admin")) {%>
+		<section>
+			<h3>Search</h3>
+			<form method="post" action ="switchUser.jsp">
+				<input id="searchbyuser" name="searchby" onchange="enable('user')" value="user" type="radio"/>
+				<label for="searchbyuser">Search by User</label>
+				<input id="userinput" name="user" required />
+				<br>
+				<input id="searchbyflight" name="searchby" onchange="enable('flight')" value="flight" type="radio"/>
+				<label for="searchbyflight">Search by Flight Number</label>
+				<input id="flightinput" name="flightnum" type="number" required disabled />
+				<label for="airlineinput">Airline:</label>
+				<select id="airlineinput" name="airline" required disabled>
+					<%
+					PreparedStatement ps = con.prepareStatement("SELECT * FROM Airline");
+					ResultSet rs = ps.executeQuery();
+					while(rs.next()) {
+						String id = rs.getString("airline_id");
+					%>
+						<option value="<%=id%>"><%=id%> (<%=rs.getString("airline_name")%>)</option>
+					<%}%>
+				</select>
+				<br>
+				<button>Go!</button>
+			</form>
+		</section>
+		<%} else if((Boolean) session.getAttribute("rep")) {%>
 			<form action="switchUser.jsp" method="post" class="rep">
 				<label style="font-size: 24px" for="user">Switch user</label>
 				<input id="user" name="user" placeholder="Username" required/>
@@ -65,11 +90,19 @@
 				</font>
 			</p>
 			<%
-				PreparedStatement temp2 = con.prepareStatement("SELECT COUNT(*) AS c FROM Reserves NATURAL JOIN Flight NATURAL JOIN Ticket NATURAL JOIN AssociatedWith WHERE d_date > (SELECT CURDATE()) && username = ?;");
-				temp2.setString(1, username);
+				PreparedStatement temp2;
+				if(flightNum != null && !flightNum.equals("null")) {
+					temp2 = con.prepareStatement("SELECT COUNT(*) AS c FROM Reserves NATURAL JOIN Flight NATURAL JOIN Ticket NATURAL JOIN AssociatedWith WHERE d_date > (SELECT CURDATE()) && flight_num = ? && airline_id = ?;");
+					temp2.setString(1, flightNum);
+					temp2.setString(2, flightAirline);
+				} else {
+					temp2 = con.prepareStatement("SELECT COUNT(*) AS c FROM Reserves NATURAL JOIN Flight NATURAL JOIN Ticket NATURAL JOIN AssociatedWith WHERE d_date > (SELECT CURDATE()) && username = ?;");
+					temp2.setString(1, username);
+				}
+				
 				ResultSet rtemp2 = temp2.executeQuery();
 				rtemp2.next();
-				if(rtemp2.getInt("c") != 0){
+				if(rtemp2.getInt("c") != 0) {
 			%>
 			<form method="post" action="cancel.jsp">
 				<input id="flightInfo" name="flightInfo" type="hidden" value=""/>
@@ -154,9 +187,18 @@
 				<label for="ticketnum">Modify ticket</label>
 				<select id="ticketnum" name="ticketnum" required>
 					<%
-					PreparedStatement ps = con.prepareStatement("SELECT * FROM Reserves NATURAL JOIN AssociatedWith NATURAL JOIN Ticket WHERE d_date > (SELECT CURDATE()) && username = ?;");
-					ps.setString(1, username);
+					PreparedStatement ps;
+					if(flightNum != null && !flightNum.equals("null")) {
+						ps = con.prepareStatement("SELECT * FROM Reserves NATURAL JOIN AssociatedWith NATURAL JOIN Ticket WHERE d_date > (SELECT CURDATE()) AND flight_num = ? AND airline_id = ?;");
+						ps.setString(1, flightNum);
+						ps.setString(2, flightAirline);
+					} else {
+						ps = con.prepareStatement("SELECT * AS c FROM Reserves NATURAL JOIN Flight NATURAL JOIN Ticket NATURAL JOIN AssociatedWith WHERE d_date > (SELECT CURDATE()) AND username = ?;");
+						ps.setString(1, username);
+					}
+
 					ResultSet rs = ps.executeQuery();
+
 					while(rs.next()){
 						int count = 0;
 					%>
@@ -192,10 +234,19 @@
 				</p>
 		</div>
 				<%
-				PreparedStatement temp3 = con.prepareStatement("SELECT COUNT(*) AS c FROM OnWaitingList NATURAL JOIN Flight WHERE username = ?;");
-				temp3.setString(1, username);
+				PreparedStatement temp3;
+				if(flightNum != null && !flightNum.equals("null")) {
+					temp3 = con.prepareStatement("SELECT COUNT(*) AS c FROM OnWaitingList NATURAL JOIN Flight WHERE flight_num = ? AND airline_id = ?;");
+					temp3.setString(1, flightNum);
+					temp3.setString(2, flightAirline);
+				} else {
+					temp3 = con.prepareStatement("SELECT COUNT(*) AS c FROM OnWaitingList NATURAL JOIN Flight WHERE username = ?;");
+					temp3.setString(1, username);
+				}
+
 				ResultSet rtemp3 = temp3.executeQuery();
 				rtemp3.next();
+
 				if(rtemp3.getInt("c") != 0){
 				%>
 				<table style ="margin: 0 auto;" style="background-color:skyblue">
@@ -210,10 +261,18 @@
 					
 				</tr>
 				<%
+				if(flightNum != null && !flightNum.equals("null")) {
+					temp3 = con.prepareStatement("SELECT * FROM OnWaitingList NATURAL JOIN Flight WHERE flight_num = ? AND airline_id = ? AND flight_num = flight_number");
+					temp3.setString(1, flightNum);
+					temp3.setString(2, flightAirline);
+				} else {
 					temp3 = con.prepareStatement("SELECT * FROM OnWaitingList NATURAL JOIN Flight WHERE username = ? && flight_num = flight_number;");
 					temp3.setString(1, username);
-					rtemp3 = temp3.executeQuery();
-				while(rtemp3.next()){
+				}
+
+				rtemp3 = temp3.executeQuery();
+
+				while(rtemp3.next()) {
 				%>
 				<tr>
 					<td><%= rtemp3.getInt("flight_num")%></td>
@@ -251,8 +310,16 @@
 				</font>
 			</p>
 			<%
-				PreparedStatement temp = con.prepareStatement("SELECT COUNT(*) AS c FROM Reserves NATURAL JOIN Flight NATURAL JOIN Ticket NATURAL JOIN AssociatedWith WHERE d_date < (SELECT CURDATE() + 1) && username = ?;");
-				temp.setString(1, username);
+				PreparedStatement temp;
+				if(flightNum != null && !flightNum.equals("null")) {
+					temp = con.prepareStatement("SELECT COUNT(*) AS c FROM Reserves NATURAL JOIN Flight NATURAL JOIN Ticket NATURAL JOIN AssociatedWith WHERE d_date < (SELECT CURDATE() + 1) AND flight_num = ? AND airline_id = ?;");	
+					temp.setString(1, flightNum);
+					temp.setString(2, flightAirline);
+				} else {
+					temp = con.prepareStatement("SELECT COUNT(*) AS c FROM Reserves NATURAL JOIN Flight NATURAL JOIN Ticket NATURAL JOIN AssociatedWith WHERE d_date < (SELECT CURDATE() + 1) && username = ?;");	
+					temp.setString(1, username);
+				}
+
 				ResultSet rtemp = temp.executeQuery();
 				rtemp.next();
 				if(rtemp.getInt("c") != 0){
@@ -273,9 +340,17 @@
 					<th>Price</th>
 				</tr>
 				<%
-					PreparedStatement ps=con.prepareStatement("SELECT * FROM Reserves NATURAL JOIN Flight NATURAL JOIN Ticket NATURAL JOIN AssociatedWith WHERE d_date < (SELECT CURDATE() + 1) && username = ?;");
+				PreparedStatement ps;
+				if(flightNum != null && !flightNum.equals("null")) {
+					ps = con.prepareStatement("SELECT * FROM Reserves NATURAL JOIN Flight NATURAL JOIN Ticket NATURAL JOIN AssociatedWith WHERE d_date < (SELECT CURDATE() + 1) AND flight_num = ? AND airline_id = ?;");	
+					ps.setString(1, flightNum);
+					ps.setString(2, flightAirline);
+				} else {
+					ps = con.prepareStatement("SELECT * FROM Reserves NATURAL JOIN Flight NATURAL JOIN Ticket NATURAL JOIN AssociatedWith WHERE d_date < (SELECT CURDATE() + 1) && username = ?;");	
 					ps.setString(1, username);
-					ResultSet rs = ps.executeQuery();
+				}
+				
+				ResultSet rs = ps.executeQuery();
 				while(rs.next()){
 				%>
 				<tr>
@@ -312,5 +387,27 @@
 			}
 			%>
 		</div>
+		<script>
+			function enable(which) {
+				var flightnum = document.getElementById('flightinput');
+				var airline = document.getElementById('airlineinput');
+				var user = document.getElementById('userinput');
+				
+				if(which === 'user') {
+					flightnum.disabled = true;
+					flightnum.value = '';
+					airline.disabled = true;
+					airline.value = '';
+
+					user.disabled = false;
+				} else {
+					user.disabled = true;
+					user.value = '';
+
+					flightnum.disabled = false;
+					airline.disabled = false;
+				}
+			}
+		</script>
 	</body>
 </html>

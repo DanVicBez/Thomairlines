@@ -26,7 +26,6 @@
 			<img alt="Thomairlines" src="https://i.imgur.com/NfZWVqI.jpg" width=55px style="display: inline"/>
 			<h1>Thomairlines</h1>
 		</div>
-		<h2>Administrator Dashboard</h2>
 		<div>
 			<p align = "left">
 				<font color = "white" size = 4>
@@ -34,6 +33,7 @@
 				</font>
 			</p>
 		</div>
+		<h2>Administrator Dashboard</h2>
 		<section>
 			<h3>User Manager</h3>
 			<%
@@ -90,7 +90,7 @@
 			String month = request.getParameter("month");
 			String year = request.getParameter("year");
 			if(month != null && year != null) {
-				PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) AS num, SUM(total_fare) AS total FROM Ticket WHERE MONTH(purchase_time) = ? AND YEAR(purchase_time) = ?");
+				PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) AS num, SUM(total_fare) AS revenue, SUM(booking_fee) AS profit FROM Ticket WHERE MONTH(purchase_time) = ? AND YEAR(purchase_time) = ?");
 				ps.setString(1, month);
 				ps.setString(2, year);
 				ResultSet rs = ps.executeQuery();
@@ -102,16 +102,18 @@
 						<br>
 						Tickets sold: <%=rs.getString("num")%>
 						<br>
-						Total revenue: $<%=rs.getInt("total")%>
+						Profit: $<%=rs.getInt("profit")%>
+						<br>
+						Revenue: $<%=rs.getInt("revenue")%>
 					</div>
-					<br>
+					<br><br>
 			<%
 				}
 			}
 			%>
-			<form method = "post" action = 'administrator.jsp'>
+			<form method = "post" action ="administrator.jsp">
 				<label for="month">Month:</label>
-				<select id= "month" name = "month" style = "margin-bottom: 10px">
+				<select id= "month" name="month" style="margin-bottom:10px">
 					<option value="1">January</option>
 					<option value="2">February</option>
 					<option value="3">March</option>
@@ -133,10 +135,86 @@
 			</form>
 		</section>
 		<section>
-			<h3>Search for Reservations</h3>
-		</section>
-		<section>
 			<h3>Revenue</h3>
+			<%
+			String choice = request.getParameter("revenueby");
+			if(choice != null) {
+				String query = "SELECT COUNT(*) AS num, SUM(total_fare) as revenue, SUM(booking_fee) AS profit " +
+							   "FROM Flight NATURAL JOIN Ticket NATURAL JOIN AssociatedWith " +
+							   "WHERE %s";
+				
+				if(choice.equals("user")) {
+					query = String.format(query, "username = ?");
+				} else if(choice.equals("flight")) {
+					query = String.format(query, "flight_num = ? AND airline_id = ?");
+				} else {
+					query = String.format(query, "airline_id = ?");
+				}
+				
+				PreparedStatement ps = con.prepareStatement(query);
+				
+				if(choice.equals("user")) {
+					String username = request.getParameter("revenueuser");
+					ps.setString(1, username);
+				} else if(choice.equals("flight")) {
+					String flight = request.getParameter("flightnum");
+					String airline = request.getParameter("airline");
+					ps.setString(1, flight);
+					ps.setString(2, airline);
+				} else {
+					String airline = request.getParameter("airline2");
+					ps.setString(1, airline);
+				}
+				
+				ResultSet rs = ps.executeQuery();
+				
+				while(rs.next()) {
+			%>
+					Tickets sold: <%=rs.getString("num")%>
+					<br>
+					Profit: $<%=rs.getInt("profit")%>
+					<br>
+					Revenue: $<%=rs.getInt("revenue")%>
+					<br>
+			<%
+				}
+			}
+			%>
+			<form method="post" action ="administrator.jsp">
+				<input id="revenuebyuser" name="revenueby" onchange="enableRevenue('user')" value="user" type="radio" checked />
+				<label for="revenuebyuser">For User</label>
+				<input id="revenueuserinput" name="revenueuser" required />
+				<br>
+				<input id="revenuebyflight" name="revenueby" onchange="enableRevenue('flight')" value="flight" type="radio"/>
+				<label for="revenuebyflight">For Flight Number</label>
+				<input id="revenueflightinput" name="flightnum" type="number" required disabled />
+				<label for="revenueairlineinput">Airline:</label>
+				<select id="revenueairlineinput" name="airline" required disabled>
+					<%
+					PreparedStatement ps = con.prepareStatement("SELECT * FROM Airline");
+					ResultSet rs = ps.executeQuery();
+					while(rs.next()) {
+						String id = rs.getString("airline_id");
+					%>
+						<option value="<%=id%>"><%=id%> (<%=rs.getString("airline_name")%>)</option>
+					<%}%>
+				</select>
+				<br>
+				<input id="revenuebyairline" name="revenueby" onchange="enableRevenue('airline')" value="airline" type="radio"/>
+				<label for="revenuebyairline">For Airline</label>
+				<select id="revenueairlineinput2" name="airline2" required disabled>
+					<%
+					ps = con.prepareStatement("SELECT * FROM Airline");
+					rs = ps.executeQuery();
+					while(rs.next()) {
+						String id = rs.getString("airline_id");
+					%>
+						<option value="<%=id%>"><%=id%> (<%=rs.getString("airline_name")%>)</option>
+					<%}%>
+				</select>
+				<br>
+				<button>Go!</button>
+			</form>
 		</section>
 		<section>
 			<h3>Most Active Flights</h3>
@@ -155,6 +233,41 @@
 				}
 				
 				document.getElementById('username').disabled = (choice === 'create');
+			}
+			
+			function enableRevenue(which) {
+				var flightnum = document.getElementById('revenueflightinput');
+				var airline = document.getElementById('revenueairlineinput');
+				var airline2 = document.getElementById('revenueairlineinput2');
+				var user = document.getElementById('revenueuserinput');
+				
+				if(which === 'user') {
+					flightnum.disabled = true;
+					flightnum.value = '';
+					airline.disabled = true;
+					airline.value = '';
+					airline2.disabled = true;
+					airline2.value = '';
+
+					user.disabled = false;
+				} else if(which === 'flight') {
+					user.disabled = true;
+					user.value = '';
+					airline2.disabled = true;
+					airline2.value = '';
+
+					flightnum.disabled = false;
+					airline.disabled = false;
+				} else {
+					user.disabled = true;
+					user.value = '';
+					flightnum.disabled = true;
+					flightnum.value = '';
+					airline.disabled = true;
+					airline.value = '';
+					
+					airline2.disabled = false;
+				}
 			}
 		</script>
 	</body>
