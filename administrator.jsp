@@ -254,6 +254,7 @@
 			<h3>Revenue</h3>
 			<%
 			String choice = request.getParameter("revenueby");
+			String message;
 			if(choice != null) {
 				query = "SELECT COUNT(*) AS num, SUM(total_fare) as revenue, SUM(booking_fee) AS profit " +
 							   "FROM Flight NATURAL JOIN Ticket NATURAL JOIN AssociatedWith " +
@@ -272,25 +273,51 @@
 				if(choice.equals("user")) {
 					String username = request.getParameter("revenueuser");
 					ps.setString(1, username);
+
+					message = username;
 				} else if(choice.equals("flight")) {
 					String flight = request.getParameter("flightnum");
 					String airline = request.getParameter("airline");
 					ps.setString(1, flight);
 					ps.setString(2, airline);
+
+					message = "Flight " + airline + flight;
 				} else {
 					String airline = request.getParameter("airline2");
 					ps.setString(1, airline);
+
+					message = airline;
 				}
 				
 				rs = ps.executeQuery();
 				
 				while(rs.next()) {
 			%>
-					Tickets sold: <%=rs.getString("num")%>
-					<br>
-					Profit: $<%=rs.getInt("profit")%>
-					<br>
-					Revenue: $<%=rs.getInt("revenue")%>
+					<div>
+						<span style="font-weight:bold">Revenue for <%=message%></span>
+						<br>
+						Tickets sold: <%=rs.getString("num")%>
+						<br>
+						Profit: $<%=rs.getInt("profit")%>
+						<br>
+						Revenue: $<%=rs.getInt("revenue")%>
+						<%
+						if(choice.equals("user")) {
+							ps = con.prepareStatement("SELECT username, SUM(total_fare) AS revenue " +
+													  "FROM Ticket GROUP BY username ORDER BY revenue DESC LIMIT 1");
+							rs = ps.executeQuery();
+							
+							if(rs.next()) {
+						%>
+								<br><br>
+								<span style="font-weight:bold">User with the highest revenue: <%=rs.getString("username")%></span>
+								<br>
+								Revenue: $<%=rs.getInt("revenue")%>
+						<%
+							}
+						}
+						%>
+					</div>
 					<br>
 			<%
 				}
