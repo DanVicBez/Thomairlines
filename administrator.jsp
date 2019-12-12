@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import ="java.sql.*"%>
+<%@ page import = "java.text.DateFormatSymbols" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -40,9 +41,9 @@
 					
 					ResultSet rs_list;
 					
-					String query = "SELECT flight_num, airline_id, count(*) count" +
+					String query = "SELECT flight_num, airline_id, count(*) AS count " +
 									"FROM AssociatedWith GROUP BY flight_num, airline_id " +
-									"ORDER BY count(*) DESC, flight_num LIMIT 10" ;
+									"ORDER BY count(*) DESC, flight_num LIMIT 10";
 					
 					PreparedStatement st = con.prepareStatement(query);
 					//st.setString(1, airport.substring(0, 4));
@@ -63,7 +64,7 @@
 								<div class="result">
 									<table>
 										<tr>
-											<td style="width: 40%; text-align: left;" >Flight Number: <%=rs_list.getInt("flight_num")%>  <%=rs_list.getString("airline_id")%><%=rs_list.getString("count")%></td>
+											<td style="width: 40%; text-align: left;" >Flight <%=rs_list.getString("airline_id")%><%=rs_list.getInt("flight_num")%>: <%=rs_list.getString("count")%> tickets</td>
 										</tr>
 									</table>
 								</div>
@@ -125,13 +126,14 @@
 								<div class="result">
 									<table>
 										<tr>
-											<td style="width: 40%; text-align: left;" ><%=rs.getString("airline_name")%> Flight <%=rs.getString("airline_id")%><%=rs.getInt("flight_num")%></td>
-											<td style="width: 13%; text-align: right;"><%=rs.getString("d_airport_id")%></td>
-											<td style="width: 13%"><%=rs.getString("a_airport_id")%></td>
-											<td style="width: 10%">$<%=rs.getInt("price")%></td>
+											<td style="width:50%; text-align: left;" ><%=rs.getString("airline_name")%> Flight <%=rs.getString("airline_id")%><%=rs.getInt("flight_num")%></td>
+											<td style="width:15%; text-align: right;"><%=rs.getString("d_airport_id")%></td>
+											<td style="width:5%">&rarr;</td>
+											<td style="width:15%"><%=rs.getString("a_airport_id")%></td>
+											<td style="width:10%">$<%=rs.getInt("price")%></td>
 										</tr>
 										<tr>
-											<td>Number Of Stops: <%=rs.getString("stops")%></td>
+											<td style="text-align: left">Number Of Stops: <%=rs.getString("stops")%></td>
 											<td style="text-align: right"><%=rs.getString("departure_time").substring(0,5)%></td>
 											<td></td>
 											<td><%=rs.getString("arrival_time").substring(0,5)%></td>
@@ -207,7 +209,7 @@
 				PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) AS num, SUM(total_fare) AS revenue, SUM(booking_fee) AS profit FROM Ticket WHERE MONTH(purchase_time) = ? AND YEAR(purchase_time) = ?");
 				ps.setString(1, month);
 				ps.setString(2, year);
-				ResultSet rs = ps.executeQuery();
+				rs = ps.executeQuery();
 				
 				if(rs.next()) {
 			%>
@@ -253,7 +255,7 @@
 			<%
 			String choice = request.getParameter("revenueby");
 			if(choice != null) {
-				String query = "SELECT COUNT(*) AS num, SUM(total_fare) as revenue, SUM(booking_fee) AS profit " +
+				query = "SELECT COUNT(*) AS num, SUM(total_fare) as revenue, SUM(booking_fee) AS profit " +
 							   "FROM Flight NATURAL JOIN Ticket NATURAL JOIN AssociatedWith " +
 							   "WHERE %s";
 				
@@ -280,7 +282,7 @@
 					ps.setString(1, airline);
 				}
 				
-				ResultSet rs = ps.executeQuery();
+				rs = ps.executeQuery();
 				
 				while(rs.next()) {
 			%>
@@ -306,7 +308,7 @@
 				<select id="revenueairlineinput" name="airline" required disabled>
 					<%
 					PreparedStatement ps = con.prepareStatement("SELECT * FROM Airline");
-					ResultSet rs = ps.executeQuery();
+					rs = ps.executeQuery();
 					while(rs.next()) {
 						String id = rs.getString("airline_id");
 					%>
@@ -329,12 +331,6 @@
 				<br>
 				<button>Go!</button>
 			</form>
-		</section>
-		<section>
-			<h3>Most Active Flights</h3>
-		</section>
-		<section>
-			<h3>Flights by Airport</h3>
 		</section>
 		<script>
 			function userEdit() {

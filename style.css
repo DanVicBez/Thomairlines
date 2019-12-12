@@ -119,6 +119,10 @@ table, th, td {
 	font-size: 20px;
 }
 
+section .result {
+	width: 80%;
+}
+
 .result table {
 	width: 100%;
 }
