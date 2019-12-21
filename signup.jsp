@@ -40,6 +40,8 @@
 				<div id="error">ERROR: The username and password cannot contain spaces</div>
 		<%
 			}
+			session.setAttribute("rep", false);
+			session.setAttribute("admin", false);
 		%>
 		<form action="createNewUser.jsp" method="POST">
 			<input type="text" name="username" placeholder="username"/>
